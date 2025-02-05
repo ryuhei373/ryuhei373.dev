@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { QueryBuilderParams } from '@nuxt/content'
-
 type SNSLink = {
     name: string
     text: string
-    url: string
+    url: string 
 }
 
-const query: QueryBuilderParams = { path: '/blog', sort: [{ createdAt: -1 }] }
+// const query: QueryBuilderParams = { path: '/blog', sort: [{ createdAt: -1 }] }
+const { path } = useRoute(); 
+const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'created_at').order('created_at', 'DESC').all());
 
 const snsLinks: SNSLink[] = [
     { name: 'X', text: '@373_3', url: 'https://x.com/373_3' },
@@ -28,29 +28,27 @@ const snsLinks: SNSLink[] = [
         </ul>
     </div>
     <div class="mt-8">
-        <ContentList :query="query" v-slot="{ list }">
-            <div class="-my-8 divide-y divide-base-100 dark:divide-base-700">
-                <div v-for="article in list" :key="article._path" class="py-8 flex flex-wrap md:flex-nowrap">
-                    <NuxtLink :to="article._path" class="w-full">
-                        <h2 class="text-xl font-bold">
-                            {{ article.title }}
-                        </h2>
-                        <PostedDate :created-at="article.createdAt" />
-                        <p class="pt-4 text-sm leading-loose text-base-600 dark:text-base-500">
-                            {{ article.description }}
-                        </p>
-                        <div
-                            class="text-orange hover:text-orange-light dark:text-orange-light dark:hover:text-orange flex items-center justify-end mt-4 gap-2">
-                            <span>Read More</span>
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M5 12h14"></path>
-                                <path d="M12 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
-                    </NuxtLink>
-                </div>
+        <div class="-my-8 divide-y divide-base-100 dark:divide-base-700">
+            <div v-for="article in articles" :key="article.path" class="py-8 flex flex-wrap md:flex-nowrap">
+                <NuxtLink :to="article.path" class="w-full">
+                    <h2 class="text-xl font-bold">
+                        {{ article.title }}
+                    </h2>
+                    <PostedDate :created-at="article.created_at" />
+                    <p class="pt-4 text-sm leading-loose text-base-600 dark:text-base-500">
+                        {{ article.description }}
+                    </p>
+                    <div
+                        class="text-orange hover:text-orange-light dark:text-orange-light dark:hover:text-orange flex items-center justify-end mt-4 gap-2">
+                        <span>Read More</span>
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </NuxtLink>
             </div>
-        </ContentList>
+        </div>
     </div>
 </template>
