@@ -33,7 +33,6 @@ export default defineNuxtConfig({
         },
       },
     },
-    // contentHead: false,
   },
 
   colorMode: {
