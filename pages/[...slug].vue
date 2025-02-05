@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { path } = useRoute();
-const { data: article } = await useAsyncData('page-data', () => queryContent().where({ _path: path }).findOne());
+const { data: article } = await useAsyncData(path, () => queryCollection('blog').path(path).first());
 
 useSeoMeta(
     {
@@ -15,13 +15,10 @@ useSeoMeta(
 )
 </script>
 
-
 <template>
-    <article class="mt-8 break-words">
-        <ContentRenderer v-if="article" :value="article">
-            <h1 class="text-3xl font-bold mb-2">{{ article.title }}</h1>
-            <PostedDate :created-at="article.createdAt" />
-            <ContentRendererMarkdown class="pt-8" :value="article" />
-        </ContentRenderer>
+    <article v-if="article" class="mt-8 break-words">
+        <h1 class="text-3xl font-bold mb-2">{{ article.title }}</h1>
+        <PostedDate :created-at="article.created_at" />
+        <ContentRenderer class="pt-8" :value="article" :excerpt=true />
     </article>
 </template>

@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     "@nuxt/content",
     "@nuxt/image",
     "@nuxtjs/color-mode",
-    "@nuxthq/studio",
   ],
 
   app: {
@@ -23,20 +22,18 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
-    prerender: {
-      routes: ["/rss.xml"],
-    },
-  },
-
   content: {
-    contentHead: false,
-    highlight: {
-      theme: {
-        default: "github-light",
-        dark: "github-dark",
+    build: {
+      markdown: {
+        highlight: {
+          theme: {
+            default: "github-light",
+            dark: "github-dark",
+          },
+        },
       },
     },
+    // contentHead: false,
   },
 
   colorMode: {
