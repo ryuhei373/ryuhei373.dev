@@ -9,6 +9,9 @@ const isDark = computed({
     }
 })
 
+const iconName = computed(() => isDark.value ? 'ph:moon-bold' : 'ph:sun-bold')
+const iconAriaLabel = computed(() => isDark.value ? 'dark theme' : 'light theme')
+
 const toggleTheme = () => {
     isDark.value = !isDark.value
 }
@@ -22,10 +25,8 @@ const toggleTheme = () => {
                 class="mr-3 inline-block rounded-full">
             <span class="text-xl font-bold">373.3</span>
         </nuxt-link>
-        <button>
-            <img v-if="!isDark" src="~/assets/PhSunBold.svg" alt="dark mode off" width="24" height="24"
-                @click="toggleTheme" />
-            <img v-else src="~/assets/PhMoonBold.svg" alt="dark mode on" width="24" height="24" @click="toggleTheme" />
+        <button type="button" aria-label="Toggle Dark Mode" class="size-auto flex items-center" >
+            <Icon @click="toggleTheme" :name="iconName" role="img" :aria-label="iconAriaLabel" size="1.5rem" />
         </button>
     </header>
 </template>
