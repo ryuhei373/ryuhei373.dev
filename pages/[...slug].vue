@@ -19,6 +19,6 @@ useSeoMeta(
     <article v-if="article" class="mt-8 break-words">
         <h1 class="text-3xl font-bold mb-2">{{ article.title }}</h1>
         <PostedDate :created-at="article.created_at" />
-        <ContentRenderer class="pt-8" :value="article" :excerpt=true />
+        <ContentRenderer class="pt-8" :value="article" />
     </article>
 </template>
