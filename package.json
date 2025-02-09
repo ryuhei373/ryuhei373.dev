@@ -13,7 +13,6 @@
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
     "@nuxt/devtools": "latest",
-    "@nuxt/icon": "1.10.3",
     "@nuxt/image": "^1.7.0",
     "nuxt": "^3.15.4",
     "vue": "^3.3.7",
