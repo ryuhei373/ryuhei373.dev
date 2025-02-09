@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/content",
     "@nuxt/image",
-    "@nuxtjs/color-mode",
   ],
 
   app: {

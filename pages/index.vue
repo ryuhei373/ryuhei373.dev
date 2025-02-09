@@ -5,29 +5,29 @@ type SNSLink = {
     url: string 
 }
 
-// const query: QueryBuilderParams = { path: '/blog', sort: [{ createdAt: -1 }] }
+const snsLinks: SNSLink[] = [
+    { name: 'ri:github-fill', text: '@ryuhei373', url: 'https://github.com/ryuhei373' },
+
+    { name: 'ri:bluesky-fill', text: '@ryuhei373.dev', url: 'https://bsky.app/profile/ryuhei373.dev' },
+    { name: 'ri:twitter-x-fill', text: '@373_3', url: 'https://x.com/373_3' },
+]
+
 const { path } = useRoute(); 
 const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'created_at').order('created_at', 'DESC').all());
-
-const snsLinks: SNSLink[] = [
-    { name: 'X', text: '@373_3', url: 'https://x.com/373_3' },
-    { name: 'Bluesky', text: '@ryuhei373.dev', url: 'https://bsky.app/profile/ryuhei373.dev' },
-    { name: 'Github', text: '@ryuhei373', url: 'https://github.com/ryuhei373' },
-]
 </script>
 
 <template>
-    <div class="mt-8">
-        <ul v-for="snsLink in snsLinks" :key="snsLink.name" class="list-none">
-            <li>
+    <div class="mt-4">
+        <ul class="list-none inline-flex gap-2">
+            <li v-for="snsLink in snsLinks" :key="snsLink.name">
                 <NuxtLink :to="snsLink.url" target="_blank">
-                    {{ snsLink.text }}
-                </NuxtLink> ({{ snsLink.name }})
+                    <UIcon :name="snsLink.name" class="size-5"/>
+                </NuxtLink> 
             </li>
         </ul>
     </div>
     <div class="mt-8">
-        <div class="-my-8 divide-y divide-base-100 dark:divide-base-700">
+        <div class="-my-8 divide-y divide-light-ui-3 dark:divide-dark-ui-3">
             <div v-for="article in articles" :key="article.path" class="py-8 flex flex-wrap md:flex-nowrap">
                 <NuxtLink :to="article.path" class="w-full">
                     <h2 class="text-light-tx dark:text-dark-tx text-xl font-bold">

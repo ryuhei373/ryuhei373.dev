@@ -18,5 +18,5 @@ const toggleTheme = () => {
 </script>
 
 <template>
-    <UButton :icon="buttonIconName" class="p-0" color="neutral" size="xl" type="button" variant="ghost" :aria-label="buttonAriaLabel" @click="toggleTheme" />
+    <UButton :icon="buttonIconName" class="p-0 cursor-pointer" color="neutral" size="xl" type="button" variant="ghost" :aria-label="buttonAriaLabel" @click="toggleTheme" />
 </template>

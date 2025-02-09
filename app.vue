@@ -19,7 +19,7 @@ useHead({
     {
       rel: "alternate",
       type: "application/rss+xml",
-      title: "373.3",
+      title: "ryuhei373.dev",
       href: "https://ryuhei373.dev/rss.xml"
     }
   ]
