@@ -1,6 +1,6 @@
 <template>
     <NuxtLink :href="href" :target="target"
-        class="text-orange hover:text-orange-light dark:text-orange-light dark:hover:text-orange hover:underline">
+        class="underline underline-offset-4">
         <slot />
     </NuxtLink>
 </template>

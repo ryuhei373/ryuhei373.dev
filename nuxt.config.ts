@@ -3,10 +3,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
-    "@nuxtjs/tailwindcss",
+    "@nuxt/ui",
     "@nuxt/content",
     "@nuxt/image",
-    '@nuxt/icon',
     "@nuxtjs/color-mode",
   ],
 
@@ -16,12 +15,10 @@ export default defineNuxtConfig({
         lang: "ja",
         prefix: "og: <https://ogp.me/ns#>",
       },
-      bodyAttrs: {
-        class:
-          "bg-base-paper text-base-black dark:bg-base-black dark:text-base-200",
-      },
     },
   },
+
+  css: ['~/assets/css/main.css'],
 
   content: {
     build: {
@@ -34,6 +31,13 @@ export default defineNuxtConfig({
         },
       },
     },
+    renderer: {
+      anchorLinks: { 
+        h2: false, 
+        h3: false, 
+        h4: false,
+      },
+    }
   },
 
   colorMode: {

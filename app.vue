@@ -1,14 +1,14 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: '373.3',
-  description: 'webアプリケーション開発者。仕事ではフルスタック気味に従事。個人としてはHTMLとCSSが好き。',
+  title: 'ryuhei373.dev',
+  description: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
   twitterCard: 'summary',
   twitterSite: '@373_3',
-  twitterTitle: '373.3',
-  ogTitle: '373.3',
+  twitterTitle: 'ryuhei373.dev',
+  ogTitle: 'ryuhei373.dev',
   ogType: 'website',
-  ogSiteName: '373.3',
-  ogDescription: 'webアプリケーション開発者。仕事ではフルスタック気味に従事。個人としてはHTMLとCSSが好き。',
+  ogSiteName: 'ryuhei373.dev',
+  ogDescription: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
   ogImage: 'https://github.com/ryuhei373.png',
   ogLocale: 'ja_JP',
   ogUrl: 'https://ryuhei373.dev/'
@@ -27,16 +27,10 @@ useHead({
 </script>
 
 <template>
-  <div class="container mx-auto max-w-screen-sm p-4 md:px-0">
-    <!-- Markup shared across all pages, ex: NavBar -->
-    <AppHeader />
-    <NuxtPage />
-  </div>
+  <UApp>
+    <div class="container mx-auto max-w-screen-md p-4 md:px-0">
+      <AppHeader />
+      <NuxtPage />
+    </div>
+  </UApp>
 </template>
-
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-</style>
