@@ -7,5 +7,6 @@ export default withNuxt({
     '.vscode/**',
   ],
   rules: {
+    'vue/no-multiple-template-root': 'off',
   },
 });

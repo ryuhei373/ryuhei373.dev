@@ -1,4 +1,4 @@
-import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { defineCollection, defineContentConfig, z } from '@nuxt/content';
 
 export default defineContentConfig({
   collections: {
@@ -9,7 +9,7 @@ export default defineContentConfig({
       type: 'page',
       schema: z.object({
         created_at: z.string(),
-      })
-    })
-  }
-})
+      }),
+    }),
+  },
+});

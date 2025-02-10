@@ -11,19 +11,19 @@ useSeoMeta({
   ogDescription: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
   ogImage: 'https://github.com/ryuhei373.png',
   ogLocale: 'ja_JP',
-  ogUrl: 'https://ryuhei373.dev/'
+  ogUrl: 'https://ryuhei373.dev/',
 });
 
 useHead({
   link: [
     {
-      rel: "alternate",
-      type: "application/rss+xml",
-      title: "ryuhei373.dev",
-      href: "https://ryuhei373.dev/rss.xml"
-    }
-  ]
-})
+      rel: 'alternate',
+      type: 'application/rss+xml',
+      title: 'ryuhei373.dev',
+      href: 'https://ryuhei373.dev/rss.xml',
+    },
+  ],
+});
 </script>
 
 <template>
