@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/eslint',
   ],
+
   devtools: { enabled: true },
 
   app: {
@@ -53,6 +54,12 @@ export default defineNuxtConfig({
       stylistic: {
         semi: true,
       },
+    },
+  },
+
+  icon: {
+    clientBundle: {
+      scan: true,
     },
   },
 });
