@@ -47,7 +47,19 @@ export default defineNuxtConfig({
     },
   },
 
+  routeRules: {
+    '/rss.xml': {
+      headers: { 'content-type': 'application/rss+xml; charset=UTF-8' },
+    },
+  },
+
   compatibilityDate: '2024-09-03',
+
+  nitro: {
+    prerender: {
+      routes: ['/rss.xml'],
+    },
+  },
 
   eslint: {
     config: {
