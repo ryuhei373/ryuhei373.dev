@@ -1,26 +1,30 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
 
   modules: [
-    "@nuxtjs/tailwindcss",
-    "@nuxt/content",
-    "@nuxt/image",
-    '@nuxt/icon',
-    "@nuxtjs/color-mode",
+    '@nuxt/ui',
+    '@nuxt/content',
+    '@nuxt/image',
+    '@nuxt/eslint',
   ],
+
+  devtools: { enabled: true },
 
   app: {
     head: {
       htmlAttrs: {
-        lang: "ja",
-        prefix: "og: <https://ogp.me/ns#>",
-      },
-      bodyAttrs: {
-        class:
-          "bg-base-paper text-base-black dark:bg-base-black dark:text-base-200",
+        lang: 'ja',
+        prefix: 'og: <https://ogp.me/ns#>',
       },
     },
+  },
+
+  css: ['~/assets/css/main.css'],
+
+  colorMode: {
+    preference: 'light',
+    fallback: 'light',
+    classSuffix: '',
   },
 
   content: {
@@ -28,19 +32,34 @@ export default defineNuxtConfig({
       markdown: {
         highlight: {
           theme: {
-            default: "github-light",
-            dark: "github-dark",
+            default: 'github-light',
+            dark: 'github-dark',
           },
         },
       },
     },
+    renderer: {
+      anchorLinks: {
+        h2: false,
+        h3: false,
+        h4: false,
+      },
+    },
   },
 
-  colorMode: {
-    preference: "light",
-    fallback: "light",
-    classSuffix: "",
+  compatibilityDate: '2024-09-03',
+
+  eslint: {
+    config: {
+      stylistic: {
+        semi: true,
+      },
+    },
   },
 
-  compatibilityDate: "2024-09-03",
+  icon: {
+    clientBundle: {
+      scan: true,
+    },
+  },
 });
