@@ -6,7 +6,16 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/content",
     "@nuxt/image",
+    '@nuxt/eslint',
   ],
+
+  eslint: {
+    config: {
+      stylistic: {
+        semi: true,
+      },
+    },
+  },
 
   app: {
     head: {
