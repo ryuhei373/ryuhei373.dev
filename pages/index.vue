@@ -35,32 +35,28 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
       </li>
     </ul>
   </div>
-  <div class="mt-8">
-    <div class="-my-8 divide-y divide-light-ui-3 dark:divide-dark-ui-3">
+  <div
+    v-for="article in articles"
+    :key="article.path"
+    class="py-8 flex flex-wrap md:flex-nowrap not-last:border-b border-light-ui-3 dark:border-dark-ui-3"
+  >
+    <NuxtLink
+      :to="article.path"
+      class="w-full"
+    >
+      <h2 class="text-light-tx dark:text-dark-tx text-xl font-bold">
+        {{ article.title }}
+      </h2>
+      <PostedDate :created-at="article.created_at" />
+      <p class="pt-4 text-sm leading-loose text-light-tx-2 dark:text-dark-tx-2 ">
+        {{ article.description }}
+      </p>
       <div
-        v-for="article in articles"
-        :key="article.path"
-        class="py-8 flex flex-wrap md:flex-nowrap"
+        class="flex items-center justify-end mt-4 gap-1"
       >
-        <NuxtLink
-          :to="article.path"
-          class="w-full"
-        >
-          <h2 class="text-light-tx dark:text-dark-tx text-xl font-bold">
-            {{ article.title }}
-          </h2>
-          <PostedDate :created-at="article.created_at" />
-          <p class="pt-4 text-sm leading-loose text-light-tx-2 dark:text-dark-tx-2 ">
-            {{ article.description }}
-          </p>
-          <div
-            class="flex items-center justify-end mt-4 gap-1"
-          >
-            <span>Read More</span>
-            <UIcon name="ph:arrow-right-bold" />
-          </div>
-        </NuxtLink>
+        <span>Read More</span>
+        <UIcon name="ph:arrow-right-bold" />
       </div>
-    </div>
+    </NuxtLink>
   </div>
 </template>
