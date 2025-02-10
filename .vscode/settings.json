@@ -9,4 +9,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
+  "workbench.externalBrowser": "edge",
 }

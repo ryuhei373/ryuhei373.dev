@@ -2,20 +2,8 @@ import { Feed } from 'feed';
 
 const basePath = 'https://ryuhei373.dev';
 
-// export default defineEventHandler(async (event) => {
-//   const { slug } = getRouterParams(event);
-//   const page = await queryCollection(event, 'blog').path(slug).first();
-//   return page;
-// });
-
 export default defineEventHandler(async (event) => {
   const docs = await queryCollection(event, 'blog').select('title', 'path', 'description', 'created_at').order('created_at', 'DESC').limit(10).all();
-  // console.log(docs);
-  // const docs = await serverQueryContent(event, {
-  //   only: ['title', 'description', '_path', 'created_at'],
-  //   sort: { createdAt: -1 },
-  //   limit: 10,
-  // }).find();
 
   const feed = new Feed({
     title: 'ryuhei373.dev',
