@@ -13,7 +13,7 @@ const snsLinks: SNSLink[] = [
 ];
 
 const { path } = useRoute();
-const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'created_at').order('created_at', 'DESC').all());
+const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'createdAt').order('createdAt', 'DESC').all());
 </script>
 
 <template>
@@ -47,7 +47,7 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
       <h2 class="text-light-tx dark:text-dark-tx text-xl font-bold">
         {{ article.title }}
       </h2>
-      <PostedDate :created-at="article.created_at" />
+      <PostedDate :created-at="article.createdAt" />
       <p class="pt-4 text-sm leading-loose text-light-tx-2 dark:text-dark-tx-2 ">
         {{ article.description }}
       </p>

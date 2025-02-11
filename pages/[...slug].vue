@@ -23,7 +23,7 @@ useSeoMeta(
     <h1 class="text-3xl font-bold mb-2">
       {{ article.title }}
     </h1>
-    <PostedDate :created-at="article.created_at" />
+    <PostedDate :created-at="article.createdAt" />
     <ContentRenderer
       class="pt-8"
       :value="article"

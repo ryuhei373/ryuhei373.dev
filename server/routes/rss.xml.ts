@@ -3,7 +3,7 @@ import { Feed } from 'feed';
 const basePath = 'https://ryuhei373.dev';
 
 export default defineEventHandler(async (event) => {
-  const docs = await queryCollection(event, 'blog').select('title', 'path', 'description', 'created_at').order('created_at', 'DESC').limit(10).all();
+  const docs = await queryCollection(event, 'blog').select('title', 'path', 'description', 'createdAt').order('createdAt', 'DESC').limit(10).all();
 
   const feed = new Feed({
     title: 'ryuhei373.dev',
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       id: basePath + doc.path,
       link: basePath + doc.path,
       description: doc.description,
-      date: new Date(doc.created_at),
+      date: new Date(doc.createdAt),
     });
   });
 

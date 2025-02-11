@@ -8,7 +8,7 @@ export default defineContentConfig({
       // Specify the type of content in this collection
       type: 'page',
       schema: z.object({
-        created_at: z.string(),
+        createdAt: z.string(),
       }),
     }),
   },
