@@ -10,7 +10,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "format": "eslint --fix . "
+    "lint:fix": "eslint --fix . "
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",

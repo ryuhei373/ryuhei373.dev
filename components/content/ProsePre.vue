@@ -1,7 +1,7 @@
 <template>
   <pre
     :class="$props.class"
-    class="bg-light-ui border-light-ui-2 dark:bg-dark-ui dark:border-dark-ui-2 border border-solid mb-4 px-4 py-2 rounded overflow-x-auto text-sm"
+    class="bg-light-ui border-light-ui-2 dark:bg-dark-ui dark:border-dark-ui-2 border border-solid mb-7 px-4 py-2 rounded overflow-x-auto text-sm"
   ><slot /></pre>
 </template>
 
