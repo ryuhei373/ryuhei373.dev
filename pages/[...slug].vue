@@ -20,12 +20,12 @@ useSeoMeta(
     v-if="article"
     class="mt-8 break-words"
   >
-    <h1 class="text-3xl font-bold mb-2">
+    <h1 class="text-3xl font-bold">
       {{ article.title }}
     </h1>
     <PostedDate :created-at="article.createdAt" />
     <ContentRenderer
-      class="pt-8"
+      class="pt-8 text-[106.25%]"
       :value="article"
     />
   </article>

@@ -1,11 +1,11 @@
 <template>
   <h2
-    :id="id"
-    class="text-xl font-bold mt-12 mb-4"
+    :id="props.id"
+    class="text-xl font-bold mt-8 mb-4"
   >
     <a
-      v-if="id && generate"
-      :href="`#${id}`"
+      v-if="props.id && generate"
+      :href="`#${props.id}`"
     >
       <slot />
     </a>
@@ -19,5 +19,5 @@ import { computed, useRuntimeConfig } from '#imports';
 const props = defineProps<{ id?: string }>();
 
 const { headings } = useRuntimeConfig().public.mdc;
-const generate = computed(() => props.id && headings?.anchorLinks?.h2);
+const generate = computed(() => props.id && ((typeof headings?.anchorLinks === 'boolean' && headings?.anchorLinks === true) || (typeof headings?.anchorLinks === 'object' && headings?.anchorLinks?.h2)));
 </script>

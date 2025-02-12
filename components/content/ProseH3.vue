@@ -1,11 +1,11 @@
 <template>
   <h3
-    :id="id"
-    class="font-bold mb-4"
+    :id="props.id"
+    class="font-bold mt-6 mb-4"
   >
     <a
-      v-if="id && generate"
-      :href="`#${id}`"
+      v-if="props.id && generate"
+      :href="`#${props.id}`"
     >
       <slot />
     </a>
@@ -14,8 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useRuntimeConfig } from '#imports';
-
 const props = defineProps<{ id?: string }>();
 
 const { headings } = useRuntimeConfig().public.mdc;
