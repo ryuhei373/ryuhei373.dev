@@ -2,6 +2,10 @@
   "name": "ryuhei373.dev",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "22.6.x",
+    "pnpm": "10.4.x"
+  },
   "type": "module",
   "scripts": {
     "build": "nuxt build",
