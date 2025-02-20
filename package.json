@@ -2,9 +2,6 @@
   "name": "ryuhei373.dev",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": "22.6.x"
-  },
   "type": "module",
   "scripts": {
     "build": "nuxt build",
@@ -15,6 +12,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix . "
   },
+  "packageManager": "pnpm@10.4.1",
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
     "@iconify-json/ri": "^1.2.5",
@@ -23,6 +21,7 @@
     "@nuxt/image": "^1.7.0",
     "eslint": "^9.20.0",
     "nuxt": "^3.15.4",
+    "pnpm": "^10.4.1",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5"
   },
