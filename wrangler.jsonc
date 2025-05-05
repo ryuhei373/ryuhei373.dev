@@ -1,7 +1,7 @@
 {
   "name": "ryuhei373",
-  "compatibility_date": "2025-04-01",
+  "compatibility_date": "2025-05-03",
   "assets": {
-    "directory": "./dist/"
+    "directory": "./.output/public/"
   }
 }
