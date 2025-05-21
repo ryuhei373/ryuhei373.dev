@@ -19,7 +19,7 @@ const snsLinks: SNSLink[] = [
         v-for="snsLink in snsLinks"
         :key="snsLink.name"
       >
-        <NuxtLink
+        <ULink
           :to="snsLink.url"
           target="_blank"
         >
@@ -27,7 +27,7 @@ const snsLinks: SNSLink[] = [
             :name="snsLink.name"
             class="size-5"
           />
-        </NuxtLink>
+        </ULink>
       </li>
     </ul>
   </div>

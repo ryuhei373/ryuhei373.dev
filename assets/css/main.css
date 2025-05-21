@@ -200,6 +200,8 @@
   --color-dark-bl-2: var(--color-blue-600);
   --color-dark-pu-2: var(--color-purple-600);
   --color-dark-ma-2: var(--color-magenta-600);
+
+  --ui-container: var(--container-3xl);
 }
 
 :root {
@@ -225,5 +227,17 @@
     &:hover {
       color: var(--color-dark-or-2);
     }
+  }
+}
+
+.prose {
+  line-height: calc(var(--spacing) * 8);
+
+  > :where(* + *) {
+    margin-block-start: calc(var(--spacing) * 8);
+  }
+  
+  :is(h2,h3) + * {
+    margin-block-start: calc(var(--spacing) * 4)
   }
 }

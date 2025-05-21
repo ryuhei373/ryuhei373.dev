@@ -25,7 +25,7 @@ useSeoMeta(
     </h1>
     <PostedDate :created-at="article.createdAt" />
     <ContentRenderer
-      class="pt-8 text-[106.25%]"
+      class="prose pt-8 text-[106.25%]"
       :value="article"
     />
   </article>

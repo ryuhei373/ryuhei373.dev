@@ -10,7 +10,7 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
     :key="article.path"
     class="py-8 flex flex-wrap md:flex-nowrap not-last:border-b border-light-ui-3 dark:border-dark-ui-3"
   >
-    <NuxtLink
+    <ULink
       :to="article.path"
       class="w-full"
     >
@@ -27,6 +27,6 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
         <span>Read More</span>
         <UIcon name="ph:arrow-right-bold" />
       </div>
-    </NuxtLink>
+    </ULink>
   </div>
 </template>
