@@ -13,7 +13,7 @@ const snsLinks: SNSLink[] = [
 </script>
 
 <template>
-  <div class="mt-3">
+  <div class="mt-4">
     <ul class="list-none inline-flex gap-2">
       <li
         v-for="snsLink in snsLinks"
