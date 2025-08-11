@@ -13,13 +13,13 @@ const snsLinks: SNSLink[] = [
 </script>
 
 <template>
-  <div class="mt-3">
+  <div class="mt-4">
     <ul class="list-none inline-flex gap-2">
       <li
         v-for="snsLink in snsLinks"
         :key="snsLink.name"
       >
-        <NuxtLink
+        <ULink
           :to="snsLink.url"
           target="_blank"
         >
@@ -27,7 +27,7 @@ const snsLinks: SNSLink[] = [
             :name="snsLink.name"
             class="size-5"
           />
-        </NuxtLink>
+        </ULink>
       </li>
     </ul>
   </div>

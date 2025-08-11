@@ -1,7 +1,7 @@
 <template>
   <h2
     :id="props.id"
-    class="text-xl font-bold mt-8 mb-4"
+    class="text-xl font-bold"
   >
     <a
       v-if="props.id && generate"
