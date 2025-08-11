@@ -14,11 +14,11 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
       :to="article.path"
       class="w-full"
     >
-      <h2 class="text-2xl font-bold text-light-tx dark:text-dark-tx ">
+      <h2 class="text-2xl font-bold text-primary">
         {{ article.title }}
       </h2>
       <PostedDate :created-at="article.createdAt" />
-      <p class="pt-4 text-sm/relaxed text-light-tx dark:text-dark-tx ">
+      <p class="pt-4 text-sm/relaxed text-primary">
         {{ article.description }}
       </p>
       <div

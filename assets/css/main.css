@@ -16,6 +16,14 @@
   }
 }
 
+.text-primary {
+  color: light-dark(var(--color-light-tx), var(--color-dark-tx));
+}
+
+.text-secondary {
+  color: light-dark(var(--color-light-tx-2), var(--color-dark-tx-2));
+}
+
 .prose {
   line-height: calc(var(--spacing) * 8);
 
