@@ -7,8 +7,11 @@
   --ui-bg: light-dark(var(--color-light-bg), var(--color-dark-bg));
   --ui-text: light-dark(var(--color-light-tx), var(--color-dark-tx));
 
-  a {
+  text-underline-offset: 0.3em;
+
+  a:any-link {
     color: light-dark(var(--color-light-or), var(--color-dark-or));
+    text-decoration-thickness: 1px;
     
     &:hover {
       color: light-dark(var(--color-light-or-2), var(--color-dark-or-2));
@@ -33,5 +36,10 @@
   
   :is(h2,h3) + * {
     margin-block-start: calc(var(--spacing) * 4)
+  }
+
+  a:any-link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
   }
 }

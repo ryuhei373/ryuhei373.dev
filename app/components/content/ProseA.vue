@@ -2,7 +2,7 @@
   <ULink
     :href="props.href"
     :target="isExternalLink ? '_blank' : '_self'"
-    class="underline underline-offset-4"
+    class=""
   >
     <slot />
   </ULink>
