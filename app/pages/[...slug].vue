@@ -4,10 +4,10 @@ const { data: article } = await useAsyncData(path, () => queryCollection('blog')
 
 useSeoMeta(
   {
-    title: `${article?.value?.title} | ryuhei373.dev`,
+    title: article?.value?.title ? `${article.value.title} | ryuhei373.dev` : 'ryuhei373.dev',
     description: article?.value?.description,
-    twitterTitle: article?.value?.title,
-    ogTitle: article?.value?.title,
+    twitterTitle: article?.value?.title || 'ryuhei373.dev',
+    ogTitle: article?.value?.title || 'ryuhei373.dev',
     ogType: 'article',
     ogDescription: article?.value?.description,
     ogUrl: `https://ryuhei373.dev${path}`,
