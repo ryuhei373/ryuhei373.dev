@@ -1,6 +1,8 @@
 <script setup lang="ts">
-const { path } = useRoute();
-const { data: article } = await useAsyncData(path, () => queryCollection('blog').path(path).first());
+const route = useRoute();
+// Remove trailing slash to match Nuxt Content's path format
+const path = route.path.replace(/\/$/, '');
+const { data: article } = await useAsyncData(`article-${path}`, () => queryCollection('blog').path(path).first());
 
 useSeoMeta(
   {
