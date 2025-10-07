@@ -39,5 +39,8 @@
       "vue-demi",
       "workerd"
     ]
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2"
   }
 }
