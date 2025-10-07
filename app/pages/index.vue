@@ -5,28 +5,28 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
 
 <template>
   <SnsLinks />
-  <div
-    v-for="article in articles"
-    :key="article.path"
-    class="py-8 flex flex-wrap md:flex-nowrap not-last:border-b border-light-ui-3 dark:border-dark-ui-3"
-  >
-    <ULink
-      :to="article.path"
-      class="w-full"
+  <UPageList divide>
+    <UBlogPost
+      v-for="article in articles"
+      :key="article.path"
+      variant="naked"
+      orientation="vertical"
     >
-      <h2 class="text-2xl font-bold text-primary">
-        {{ article.title }}
-      </h2>
-      <PostedDate :created-at="article.createdAt" />
-      <p class="pt-4 text-sm/relaxed text-primary">
-        {{ article.description }}
-      </p>
-      <div
-        class="flex items-center justify-end mt-4 gap-1"
-      >
-        <span>Read More</span>
-        <UIcon name="ph:arrow-right-bold" />
-      </div>
-    </ULink>
-  </div>
+      <template #body>
+        <ULink :to="article.path" class="block py-8">
+          <h2 class="text-2xl font-bold text-primary">
+            {{ article.title }}
+          </h2>
+          <PostedDate :created-at="article.createdAt" class="mb-5" />
+          <p class="text-sm/relaxed text-primary mb-5">{{ article.description }}</p>
+          <div class="flex justify-end">
+            <div class="hover:underline inline-flex items-center gap-1">
+              Read More
+              <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
+            </div>
+          </div>
+        </ULink>
+      </template>
+    </UBlogPost>
+  </UPageList>
 </template>

@@ -1,18 +1,40 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 @import "./initialize.css";
+
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
+  /* Background colors */
   --ui-bg: light-dark(var(--color-light-bg), var(--color-dark-bg));
+  --ui-bg-muted: light-dark(var(--color-light-bg-2), var(--color-dark-bg-2));
+  --ui-bg-elevated: light-dark(var(--color-light-ui), var(--color-dark-ui));
+  --ui-bg-accented: light-dark(var(--color-light-ui-2), var(--color-dark-ui-2));
+  --ui-bg-inverted: light-dark(var(--color-dark-bg), var(--color-light-bg));
+
+  /* Text colors */
   --ui-text: light-dark(var(--color-light-tx), var(--color-dark-tx));
+  --ui-text-highlighted: light-dark(var(--color-black), var(--color-paper));
+  --ui-text-toned: light-dark(var(--color-light-tx-2), var(--color-dark-tx-2));
+  --ui-text-muted: light-dark(var(--color-light-tx-2), var(--color-dark-tx-2));
+  --ui-text-dimmed: light-dark(var(--color-light-tx-3), var(--color-dark-tx-3));
+  --ui-text-inverted: light-dark(var(--color-paper), var(--color-black));
+
+  /* Border colors */
+  --ui-border: light-dark(var(--color-light-ui-2), var(--color-dark-ui-2));
+  --ui-border-muted: light-dark(var(--color-light-ui), var(--color-dark-ui));
+  --ui-border-accented: light-dark(var(--color-light-ui-3), var(--color-dark-ui-3));
+  --ui-border-inverted: light-dark(var(--color-dark-bg), var(--color-light-bg));
+
+  /* Primary color (for links and accents) */
+  --ui-primary: light-dark(var(--color-light-or), var(--color-dark-or));
 
   text-underline-offset: 0.3em;
 
   a:any-link {
     color: light-dark(var(--color-light-or), var(--color-dark-or));
     text-decoration-thickness: 1px;
-    
+
     &:hover {
       color: light-dark(var(--color-light-or-2), var(--color-dark-or-2));
     }
@@ -25,21 +47,4 @@
 
 .text-secondary {
   color: light-dark(var(--color-light-tx-2), var(--color-dark-tx-2));
-}
-
-.prose {
-  line-height: calc(var(--spacing) * 8);
-
-  > :where(* + *) {
-    margin-block-start: calc(var(--spacing) * 8);
-  }
-  
-  :is(h2,h3) + * {
-    margin-block-start: calc(var(--spacing) * 4)
-  }
-
-  a:any-link {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-  }
 }
