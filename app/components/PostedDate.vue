@@ -17,5 +17,5 @@ const postedDate = computed(() => {
 </script>
 
 <template>
-  <time class="text-secondary text-base inline-block">{{ postedDate }}</time>
+  <time class="text-secondary text-sm inline-block">{{ postedDate }}</time>
 </template>

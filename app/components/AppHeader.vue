@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center">
+  <header class="flex justify-between items-center">
     <ULink
       to="/"
       class="flex items-center gap-3"
@@ -8,5 +8,5 @@
       <span class="text-xl font-bold">ryuhei373.dev</span>
     </ULink>
     <ColorModeButton />
-  </div>
+  </header>
 </template>
