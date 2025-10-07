@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const route = useRoute();
-// Remove trailing slash to match Nuxt Content's path format
 const path = route.path.replace(/\/$/, '');
 const { data: article } = await useAsyncData(path, () => queryCollection('blog').path(path).first());
 
@@ -18,17 +17,13 @@ useSeoMeta(
 </script>
 
 <template>
-  <article
-    v-if="article"
-    class="mt-8 break-words"
-  >
-    <h1 class="text-3xl font-bold">
-      {{ article.title }}
-    </h1>
-    <PostedDate :created-at="article.createdAt" />
-    <ContentRenderer
-      class="prose pt-8"
-      :value="article"
-    />
-  </article>
+  <UPage v-if="article" as="article">
+    <UPageHeader :title="article.title">
+      <PostedDate :created-at="article.createdAt" />
+    </UPageHeader>
+
+    <UPageBody>
+      <ContentRenderer :value="article" />
+    </UPageBody>
+  </UPage>
 </template>
