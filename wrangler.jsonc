@@ -2,6 +2,7 @@
   "name": "ryuhei373",
   "compatibility_date": "2025-05-03",
   "assets": {
-    "directory": "./.output/public/"
+    "directory": "./.output/public/",
+    "html_handling": "drop-trailing-slash"
   }
 }
