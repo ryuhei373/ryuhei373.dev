@@ -14,11 +14,11 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
     >
       <template #body>
         <ULink :to="article.path" class="block py-8">
-          <h2 class="text-2xl font-bold text-primary">
+          <h2 class="text-2xl font-bold text-highlighted">
             {{ article.title }}
           </h2>
           <PostedDate :created-at="article.createdAt" class="mb-5" />
-          <p class="text-sm/relaxed text-primary mb-5">{{ article.description }}</p>
+          <p class="text-sm/relaxed text-default mb-5">{{ article.description }}</p>
           <div class="flex justify-end">
             <div class="hover:underline inline-flex items-center gap-1">
               Read More
