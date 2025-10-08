@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const route = useRoute();
-const path = route.path.replace(/\/$/, '');
+const { path } = useRoute();
 const { data: article } = await useAsyncData(path, () => queryCollection('blog').path(path).first());
 
 useSeoMeta(
