@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { path } = useRoute();
-const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'createdAt').order('createdAt', 'DESC').all());
+const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'createdAt', 'tags').order('createdAt', 'DESC').all());
 </script>
 
 <template>
@@ -17,7 +17,8 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
           <h2 class="text-2xl font-bold text-highlighted">
             {{ article.title }}
           </h2>
-          <PostedDate :created-at="article.createdAt" class="mb-5" />
+          <PostedDate :created-at="article.createdAt" class="mb-3" />
+          <ArticleTags :tags="article.tags" class="mb-5" />
           <p class="text-sm/relaxed text-default mb-5">{{ article.description }}</p>
           <div class="flex justify-end">
             <div class="hover:underline inline-flex items-center gap-1">

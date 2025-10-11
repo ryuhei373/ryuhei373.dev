@@ -18,7 +18,8 @@ useSeoMeta(
 <template>
   <UPage v-if="article" as="article">
     <UPageHeader :title="article.title">
-      <PostedDate :created-at="article.createdAt" />
+      <PostedDate :created-at="article.createdAt" class="mb-3" />
+      <ArticleTags :tags="article.tags" />
     </UPageHeader>
 
     <UPageBody>
