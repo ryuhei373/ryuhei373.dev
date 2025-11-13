@@ -2,7 +2,8 @@
   <header class="flex justify-between items-center">
     <ULink
       to="/"
-      class="flex items-center gap-3"
+      class="flex items-center gap-3 hover:text-secondary"
+      inactive-class="text-primary"
     >
       <UAvatar src="https://github.com/ryuhei373.png" />
       <span class="text-xl font-bold">ryuhei373.dev</span>

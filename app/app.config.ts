@@ -5,7 +5,7 @@ export default defineAppConfig({
     },
     prose: {
       a: {
-        base: 'underline hover:underline border-none hover:border-none',
+        base: 'text-primary hover:text-secondary underline hover:underline border-none hover:border-none',
       },
     },
     page: {
