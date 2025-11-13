@@ -22,6 +22,8 @@ const snsLinks: SNSLink[] = [
         <ULink
           :to="snsLink.url"
           target="_blank"
+          class="hover:text-secondary"
+          inactive-class="text-primary"
         >
           <UIcon
             :name="snsLink.name"
