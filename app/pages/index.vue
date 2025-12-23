@@ -22,7 +22,7 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
           <div class="flex justify-end">
             <div class="group-hover:underline inline-flex items-center gap-1">
               Read More
-              <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
+              <UIcon name="i-ri-arrow-right-s-line" class="w-4 h-4" />
             </div>
           </div>
         </ULink>
