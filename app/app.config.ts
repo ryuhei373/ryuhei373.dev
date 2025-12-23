@@ -1,5 +1,9 @@
 export default defineAppConfig({
   ui: {
+    icons: {
+      light: 'i-ph-sun-bold',
+      dark: 'i-ph-moon-bold',
+    },
     container: {
       base: 'w-full max-w-(--ui-container) mx-auto px-6 md:px-0 lg:px-0 py-8',
     },
