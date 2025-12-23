@@ -75,4 +75,10 @@ export default defineNuxtConfig({
       scan: true,
     },
   },
+
+  fonts: {
+    families: [
+      { name: 'Noto Sans JP', provider: 'google' },
+    ],
+  },
 });
