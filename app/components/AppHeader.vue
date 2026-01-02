@@ -8,6 +8,6 @@
       <UAvatar src="https://github.com/ryuhei373.png" />
       <span class="text-xl font-bold">ryuhei373.dev</span>
     </ULink>
-    <UColorModeSwitch size="xl" />
+    <DarkModeToggleSwitch />
   </header>
 </template>
