@@ -61,7 +61,7 @@ const handleFaviconError = (event: Event) => {
     v-if="!pending"
     :to="url"
     target="_blank"
-    class="my-5 block border border-accented rounded-lg overflow-hidden hover:border-secondary transition-colors group"
+    class="my-5 block border border-muted rounded-lg overflow-hidden hover:border-secondary transition-colors group bg-muted"
   >
     <div class="flex items-center h-28">
       <div class="flex-1 p-4 min-w-0">
