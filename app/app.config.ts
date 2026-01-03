@@ -11,6 +11,9 @@ export default defineAppConfig({
       a: {
         base: 'text-primary hover:text-secondary underline hover:underline border-none hover:border-none',
       },
+      code: {
+        base: 'px-1.5 py-0.5 text-sm font-mono font-medium rounded-md inline-block break-words max-w-full',
+      },
     },
     page: {
       slots: {
