@@ -7,5 +7,5 @@ createdAt: $TODAY
 updatedAt: $TODAY
 ---
 
-<!--more--> 
+<!--more-->
 " > ./content/blog/$TODAY.md
