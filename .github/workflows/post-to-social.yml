@@ -19,8 +19,8 @@ jobs:
       - name: Get new blog posts
         id: new-posts
         run: |
-          # 新規追加されたファイルのみ取得
-          NEW_FILES=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.md')
+          # 新規追加されたファイルのみ取得（--no-renamesでリネーム検出を無効化）
+          NEW_FILES=$(git diff --no-renames --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.md')
 
           if [ -z "$NEW_FILES" ]; then
             echo "No new blog posts found"
