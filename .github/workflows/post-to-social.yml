@@ -79,7 +79,8 @@ jobs:
           BSKY_INTENT="https://bsky.app/intent/compose?text=${ENCODED_TEXT}"
 
           # PRにコメント
-          gh pr comment "$PR_NUMBER" --body "## 📢 SNSでシェア
+          gh pr comment "$PR_NUMBER" --body "$(cat <<EOF
+## 📢 SNSでシェア
 
 新しいブログ記事が公開されました！
 
@@ -89,4 +90,6 @@ ${URL}
 以下のリンクからSNSに投稿できます：
 
 - [X (Twitter) でポスト](${X_INTENT})
-- [Bluesky でポスト](${BSKY_INTENT})"
+- [Bluesky でポスト](${BSKY_INTENT})
+EOF
+          )"
