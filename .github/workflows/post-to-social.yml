@@ -1,0 +1,92 @@
+name: Post to Social Media
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/blog/**'
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get new blog posts
+        id: new-posts
+        run: |
+          # 新規追加されたファイルのみ取得
+          NEW_FILES=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.md')
+
+          if [ -z "$NEW_FILES" ]; then
+            echo "No new blog posts found"
+            echo "has_new_posts=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "has_new_posts=true" >> $GITHUB_OUTPUT
+
+          # 最初の新規ファイルを処理（複数記事の同時追加は想定外）
+          FILE=$(echo "$NEW_FILES" | head -n 1)
+          echo "file=$FILE" >> $GITHUB_OUTPUT
+
+          # frontmatterからタイトルを取得
+          TITLE=$(sed -n '/^---$/,/^---$/p' "$FILE" | grep '^title:' | sed 's/^title: *//')
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+
+          # ファイル名からスラッグを取得（例: 2026-01-12.md -> 2026-01-12）
+          SLUG=$(basename "$FILE" .md)
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+
+          # URLを生成
+          URL="https://ryuhei373.dev/blog/$SLUG"
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Get merged PR number
+        if: steps.new-posts.outputs.has_new_posts == 'true'
+        id: get-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # マージコミットから関連するPR番号を取得
+          PR_NUMBER=$(gh pr list --state merged --search "${{ github.sha }}" --json number --jq '.[0].number')
+
+          if [ -z "$PR_NUMBER" ]; then
+            # 直接pushの場合はコミットメッセージからPR番号を探す
+            PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K[0-9]+' | head -1)
+          fi
+
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with share links
+        if: steps.new-posts.outputs.has_new_posts == 'true' && steps.get-pr.outputs.pr_number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="${{ steps.new-posts.outputs.title }}"
+          URL="${{ steps.new-posts.outputs.url }}"
+          PR_NUMBER="${{ steps.get-pr.outputs.pr_number }}"
+
+          # URLエンコード（jqを使用）
+          ENCODED_TEXT=$(printf '%s' "$TITLE $URL" | jq -sRr @uri)
+
+          # Intent URLs
+          X_INTENT="https://twitter.com/intent/tweet?text=${ENCODED_TEXT}"
+          BSKY_INTENT="https://bsky.app/intent/compose?text=${ENCODED_TEXT}"
+
+          # PRにコメント
+          gh pr comment "$PR_NUMBER" --body "## 📢 SNSでシェア
+
+新しいブログ記事が公開されました！
+
+**${TITLE}**
+${URL}
+
+以下のリンクからSNSに投稿できます：
+
+- [X (Twitter) でポスト](${X_INTENT})
+- [Bluesky でポスト](${BSKY_INTENT})"
