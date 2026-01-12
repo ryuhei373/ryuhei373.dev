@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "labels": ["dependencies"],
+  "mise": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["mise"],
+      "matchPackageNames": ["node"],
+      "allowedVersions": "/^24\\./"
+    }
+  ]
+}

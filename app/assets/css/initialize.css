@@ -1,3 +1,11 @@
+/**
+ * Flexoki Color Scheme
+ * https://github.com/kepano/flexoki
+ *
+ * MIT License
+ * Copyright (c) 2023 Steph Ango
+ */
+
 @theme {
   --color-amber-*: initial;
   --color-lime-*: initial;
