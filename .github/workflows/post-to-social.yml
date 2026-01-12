@@ -6,6 +6,25 @@ on:
       - main
     paths:
       - 'content/blog/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'content/blog/**'
+  workflow_dispatch:
+    inputs:
+      test_file:
+        description: 'テスト対象ファイル（例: content/blog/2026-01-13.md）'
+        type: string
+        default: ''
+      test_pr_number:
+        description: 'コメント先のPR番号'
+        type: string
+        default: ''
+      dry_run:
+        description: 'ドライラン（コメントしない）'
+        type: boolean
+        default: true
 
 jobs:
   post:
@@ -16,13 +35,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Get new blog posts
         id: new-posts
         run: |
-          # 新規追加されたファイルのみ取得（--no-renamesでリネーム検出を無効化）
-          NEW_FILES=$(git diff --no-renames --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.md')
+          TEST_FILE="${{ inputs.test_file }}"
+
+          if [ -n "$TEST_FILE" ]; then
+            # workflow_dispatchでテストファイルが指定されている場合
+            if [ -f "$TEST_FILE" ]; then
+              NEW_FILES="$TEST_FILE"
+              echo "::notice::Using test file: $TEST_FILE"
+            else
+              echo "::error::Test file not found: $TEST_FILE"
+              echo "has_new_posts=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PRの場合: ベースブランチとの差分を取得
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            NEW_FILES=$(git diff --no-renames --name-only --diff-filter=A "$BASE_SHA" HEAD -- 'content/blog/*.md')
+          else
+            # pushの場合: 直前のコミットとの差分
+            NEW_FILES=$(git diff --no-renames --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.md')
+          fi
 
           if [ -z "$NEW_FILES" ]; then
             echo "No new blog posts found"
@@ -48,30 +85,42 @@ jobs:
           URL="https://ryuhei373.dev/blog/$SLUG"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Get merged PR number
+          echo "::notice::New blog post found: $TITLE ($URL)"
+
+      - name: Get PR number
         if: steps.new-posts.outputs.has_new_posts == 'true'
         id: get-pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # マージコミットから関連するPR番号を取得
-          PR_NUMBER=$(gh pr list --state merged --search "${{ github.sha }}" --json number --jq '.[0].number')
+          TEST_PR="${{ inputs.test_pr_number }}"
 
-          if [ -z "$PR_NUMBER" ]; then
-            # 直接pushの場合はコミットメッセージからPR番号を探す
-            PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K[0-9]+' | head -1)
+          if [ -n "$TEST_PR" ]; then
+            # workflow_dispatchでPR番号が指定されている場合
+            PR_NUMBER="$TEST_PR"
+            echo "::notice::Using test PR number: $PR_NUMBER"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PRイベントの場合: イベントからPR番号を取得
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          else
+            # pushの場合: マージコミットから関連するPR番号を取得
+            PR_NUMBER=$(gh pr list --state merged --search "${{ github.sha }}" --json number --jq '.[0].number')
+
+            if [ -z "$PR_NUMBER" ]; then
+              # 直接pushの場合はコミットメッセージからPR番号を探す
+              PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K[0-9]+' | head -1)
+            fi
           fi
 
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "::notice::PR number: $PR_NUMBER"
 
-      - name: Comment on PR with share links
-        if: steps.new-posts.outputs.has_new_posts == 'true' && steps.get-pr.outputs.pr_number != ''
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate share links
+        if: steps.new-posts.outputs.has_new_posts == 'true'
+        id: share-links
         run: |
           TITLE="${{ steps.new-posts.outputs.title }}"
           URL="${{ steps.new-posts.outputs.url }}"
-          PR_NUMBER="${{ steps.get-pr.outputs.pr_number }}"
 
           # URLエンコード（jqを使用）
           ENCODED_TEXT=$(printf '%s' "$TITLE $URL" | jq -sRr @uri)
@@ -80,7 +129,29 @@ jobs:
           X_INTENT="https://twitter.com/intent/tweet?text=${ENCODED_TEXT}"
           BSKY_INTENT="https://bsky.app/intent/compose?text=${ENCODED_TEXT}"
 
-          # PRにコメント
+          echo "x_intent=$X_INTENT" >> "$GITHUB_OUTPUT"
+          echo "bsky_intent=$BSKY_INTENT" >> "$GITHUB_OUTPUT"
+
+          # ログに出力（検証用）
+          echo "::group::Share Links"
+          echo "X (Twitter): $X_INTENT"
+          echo "Bluesky: $BSKY_INTENT"
+          echo "::endgroup::"
+
+      - name: Comment on PR with share links
+        if: |
+          steps.new-posts.outputs.has_new_posts == 'true' &&
+          steps.get-pr.outputs.pr_number != '' &&
+          (github.event_name != 'workflow_dispatch' || inputs.dry_run == false)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="${{ steps.new-posts.outputs.title }}"
+          URL="${{ steps.new-posts.outputs.url }}"
+          PR_NUMBER="${{ steps.get-pr.outputs.pr_number }}"
+          X_INTENT="${{ steps.share-links.outputs.x_intent }}"
+          BSKY_INTENT="${{ steps.share-links.outputs.bsky_intent }}"
+
           BODY=$(printf '%s\n' \
             "## 📢 SNSでシェア" \
             "" \
@@ -93,4 +164,14 @@ jobs:
             "" \
             "- [X (Twitter) でポスト](${X_INTENT})" \
             "- [Bluesky でポスト](${BSKY_INTENT})")
+
           gh pr comment "$PR_NUMBER" --body "$BODY"
+          echo "::notice::Comment posted to PR #$PR_NUMBER"
+
+      - name: Dry run summary
+        if: |
+          steps.new-posts.outputs.has_new_posts == 'true' &&
+          (github.event_name == 'workflow_dispatch' && inputs.dry_run == true)
+        run: |
+          echo "::warning::Dry run mode - no comment posted"
+          echo "Would comment on PR #${{ steps.get-pr.outputs.pr_number }}"
