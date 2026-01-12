@@ -24,27 +24,27 @@ jobs:
 
           if [ -z "$NEW_FILES" ]; then
             echo "No new blog posts found"
-            echo "has_new_posts=false" >> $GITHUB_OUTPUT
+            echo "has_new_posts=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "has_new_posts=true" >> $GITHUB_OUTPUT
+          echo "has_new_posts=true" >> "$GITHUB_OUTPUT"
 
           # 最初の新規ファイルを処理（複数記事の同時追加は想定外）
           FILE=$(echo "$NEW_FILES" | head -n 1)
-          echo "file=$FILE" >> $GITHUB_OUTPUT
+          echo "file=$FILE" >> "$GITHUB_OUTPUT"
 
           # frontmatterからタイトルを取得
           TITLE=$(sed -n '/^---$/,/^---$/p' "$FILE" | grep '^title:' | sed 's/^title: *//')
-          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
 
           # ファイル名からスラッグを取得（例: 2026-01-12.md -> 2026-01-12）
           SLUG=$(basename "$FILE" .md)
-          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
 
           # URLを生成
           URL="https://ryuhei373.dev/blog/$SLUG"
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
 
       - name: Get merged PR number
         if: steps.new-posts.outputs.has_new_posts == 'true'
@@ -60,7 +60,7 @@ jobs:
             PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K[0-9]+' | head -1)
           fi
 
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
       - name: Comment on PR with share links
         if: steps.new-posts.outputs.has_new_posts == 'true' && steps.get-pr.outputs.pr_number != ''
@@ -79,17 +79,16 @@ jobs:
           BSKY_INTENT="https://bsky.app/intent/compose?text=${ENCODED_TEXT}"
 
           # PRにコメント
-          gh pr comment "$PR_NUMBER" --body "$(cat <<EOF
-## 📢 SNSでシェア
-
-新しいブログ記事が公開されました！
-
-**${TITLE}**
-${URL}
-
-以下のリンクからSNSに投稿できます：
-
-- [X (Twitter) でポスト](${X_INTENT})
-- [Bluesky でポスト](${BSKY_INTENT})
-EOF
-          )"
+          BODY=$(printf '%s\n' \
+            "## 📢 SNSでシェア" \
+            "" \
+            "新しいブログ記事が公開されました！" \
+            "" \
+            "**${TITLE}**" \
+            "${URL}" \
+            "" \
+            "以下のリンクからSNSに投稿できます：" \
+            "" \
+            "- [X (Twitter) でポスト](${X_INTENT})" \
+            "- [Bluesky でポスト](${BSKY_INTENT})")
+          gh pr comment "$PR_NUMBER" --body "$BODY"
