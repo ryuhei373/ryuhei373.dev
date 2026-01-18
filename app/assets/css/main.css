@@ -6,7 +6,7 @@
   font-family:
     "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans",
     Meiryo, sans-serif;
-  text-autospace: normal;
+  /* text-autospace: normal; iOS Safariで折り返しが不安定になる問題があるため一時無効化 */
   text-underline-offset: 0.3em;
 
   /* Nuxt UI variables - must be in :root to override @nuxt/ui defaults */
