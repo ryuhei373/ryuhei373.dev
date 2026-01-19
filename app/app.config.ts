@@ -14,6 +14,9 @@ export default defineAppConfig({
       code: {
         base: 'px-1.5 py-0.5 text-sm font-mono font-medium rounded-md inline-block break-words max-w-full',
       },
+      p: {
+        base: 'my-5 leading-7', // text-prettyを削除（iOS Safariで折り返しが不安定になる問題）
+      },
     },
     page: {
       slots: {

@@ -2,4 +2,4 @@ pre-commit:
   commands:
     lint:
       glob: "*.{js,ts,vue,mjs}"
-      run: pnpm lint:fix {staged_files} && git add {staged_files}
+      run: pnpm exec eslint --fix {staged_files} && git add {staged_files}
