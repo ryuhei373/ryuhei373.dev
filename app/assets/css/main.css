@@ -9,11 +9,6 @@
   text-autospace: normal;
   text-underline-offset: 0.3em;
 
-  /* 日本語テキストの折り返し設定 */
-  overflow-wrap: anywhere;
-  word-break: normal;
-  line-break: strict;
-
   /* Nuxt UI variables - must be in :root to override @nuxt/ui defaults */
   --ui-container: var(--container-3xl);
 
