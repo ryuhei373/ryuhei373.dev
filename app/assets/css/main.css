@@ -38,12 +38,12 @@
   text-decoration-thickness: 1px;
 }
 
-/* em-based grid for prose content */
-.prose {
+/* em-based grid for blog content */
+article [data-slot="center"] > div > div {
   display: grid;
   grid-template-columns: repeat(auto-fit, 1em);
 }
 
-.prose > * {
+article [data-slot="center"] > div > div > * {
   grid-column: 1 / -1;
 }
