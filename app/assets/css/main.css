@@ -37,3 +37,13 @@
 * {
   text-decoration-thickness: 1px;
 }
+
+/* em-based grid for prose content */
+.prose {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 1em);
+}
+
+.prose > * {
+  grid-column: 1 / -1;
+}
