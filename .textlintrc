@@ -1,0 +1,23 @@
+{
+  "filters": {},
+  "rules": {
+    "preset-ja-technical-writing": {
+      "sentence-length": {
+        "max": 150
+      },
+      "max-comma": {
+        "max": 4
+      },
+      "no-exclamation-question-mark": false,
+      "ja-no-weak-phrase": false,
+      "no-unmatched-pair": false,
+      "no-doubled-joshi": false,
+      "no-doubled-conjunctive-particle-ga": false
+    },
+    "preset-ja-spacing": {
+      "ja-space-between-half-and-full-width": {
+        "space": "never"
+      }
+    }
+  }
+}
