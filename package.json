@@ -11,7 +11,9 @@
     "deploy": "nuxt generate && wrangler deploy",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix . "
+    "lint:fix": "eslint --fix . ",
+    "textlint": "textlint \"content/**/*.md\"",
+    "textlint:fix": "textlint --fix \"content/**/*.md\""
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
@@ -26,6 +28,9 @@
     "feed": "^5.1.0",
     "nuxt": "^4.2.2",
     "pnpm": "^10.28.0",
+    "textlint": "^15.5.1",
+    "textlint-rule-preset-ja-spacing": "^2.4.3",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",
     "wrangler": "^4.58.0"
