@@ -1,0 +1,77 @@
+name: Update Blog Post Date
+
+on:
+  schedule:
+    - cron: '0 15 * * *' # 0:00 JST (15:00 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-blog-date:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update blog post dates in open PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          echo "Today (JST): ${TODAY}"
+
+          # blog/ プレフィックスのブランチを持つ open PR を取得
+          BLOG_PRS=$(gh pr list --state open --json number,headRefName \
+            --jq '.[] | select(.headRefName | startswith("blog/")) | "\(.number)\t\(.headRefName)"')
+
+          if [ -z "$BLOG_PRS" ]; then
+            echo "No open blog PRs found"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          while IFS=$'\t' read -r pr_number branch; do
+            echo "=== Processing PR #${pr_number} (branch: ${branch}) ==="
+
+            git checkout "$branch"
+            git pull origin "$branch"
+
+            # main との差分からブログファイルを特定
+            BLOG_FILE=$(git diff --name-only origin/main -- 'content/blog/*.md' | head -1)
+
+            if [ -z "$BLOG_FILE" ]; then
+              echo "  No blog file found, skipping"
+              continue
+            fi
+
+            echo "  Found: ${BLOG_FILE}"
+            NEW_FILE="content/blog/${TODAY}.md"
+
+            # 既に最新の場合はスキップ
+            if [ "$BLOG_FILE" = "$NEW_FILE" ] && grep -q "^createdAt: ${TODAY}$" "$BLOG_FILE"; then
+              echo "  Already up to date, skipping"
+              continue
+            fi
+
+            # フロントマターの日付を更新
+            sed -i "s/^createdAt: .*/createdAt: ${TODAY}/" "$BLOG_FILE"
+            sed -i "s/^updatedAt: .*/updatedAt: ${TODAY}/" "$BLOG_FILE"
+
+            # ファイル名を更新（必要な場合）
+            if [ "$BLOG_FILE" != "$NEW_FILE" ]; then
+              git mv "$BLOG_FILE" "$NEW_FILE"
+            fi
+
+            git add -A
+            git commit -m "chore: ブログ記事の日付を ${TODAY} に更新"
+            git push origin "$branch"
+
+            echo "  Updated to ${TODAY}"
+          done <<< "$BLOG_PRS"
