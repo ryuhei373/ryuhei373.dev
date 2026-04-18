@@ -13,16 +13,26 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
       orientation="vertical"
     >
       <template #body>
-        <ULink :to="article.path" class="block py-8 hover:text-secondary group" inactive-class="text-primary">
+        <ULink
+          :to="article.path"
+          class="block py-8 hover:text-secondary group"
+          inactive-class="text-primary"
+        >
           <h2 class="text-2xl font-bold text-highlighted">
             {{ article.title }}
           </h2>
-          <PostedDate :created-at="article.createdAt" class="mb-5" />
+          <PostedDate
+            :created-at="article.createdAt"
+            class="mb-5"
+          />
           <p class="text-sm/relaxed text-default mb-5">{{ article.description }}</p>
           <div class="flex justify-end">
             <div class="group-hover:underline inline-flex items-center gap-1">
               Read More
-              <UIcon name="i-ri-arrow-right-s-line" class="w-4 h-4" />
+              <UIcon
+                name="i-ri-arrow-right-s-line"
+                class="w-4 h-4"
+              />
             </div>
           </div>
         </ULink>
