@@ -22,13 +22,13 @@ export default defineEventHandler(async (event) => {
 
     // OGPタグから情報を取得
     const getOgp = (property: string) => {
-      return $(`meta[property="${property}"]`).attr('content') ||
-             $(`meta[name="${property}"]`).attr('content') || '';
+      return $(`meta[property="${property}"]`).attr('content')
+        || $(`meta[name="${property}"]`).attr('content') || '';
     };
 
     const title = getOgp('og:title') || $('title').text() || '';
-    const description = getOgp('og:description') ||
-                       $('meta[name="description"]').attr('content') || '';
+    const description = getOgp('og:description')
+      || $('meta[name="description"]').attr('content') || '';
     const image = getOgp('og:image') || '';
     const siteName = getOgp('og:site_name') || '';
 
@@ -44,7 +44,8 @@ export default defineEventHandler(async (event) => {
       image: absoluteImage,
       siteName,
     };
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to fetch OGP data:', error);
     throw createError({
       statusCode: 500,

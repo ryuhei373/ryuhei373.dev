@@ -16,7 +16,10 @@ useSeoMeta(
 </script>
 
 <template>
-  <UPage v-if="article" as="article">
+  <UPage
+    v-if="article"
+    as="article"
+  >
     <UPageHeader :title="article.title">
       <PostedDate :created-at="article.createdAt" />
     </UPageHeader>

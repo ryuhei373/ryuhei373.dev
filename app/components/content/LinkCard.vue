@@ -30,7 +30,7 @@ interface OgpData {
   siteName: string;
 }
 
-const { data: ogpData, pending, error } = useFetch<OgpData>('/api/ogp', {
+const { data: ogpData, pending } = useFetch<OgpData>('/api/ogp', {
   query: { url: props.url },
   // プロップで指定された値がある場合はOGP取得をスキップ
   immediate: !props.title && !props.description,
@@ -42,7 +42,8 @@ const displayImage = computed(() => props.image || ogpData.value?.image || '');
 const displayDomain = computed(() => {
   try {
     return new URL(props.url).hostname.replace('www.', '');
-  } catch {
+  }
+  catch {
     return props.url;
   }
 });
@@ -81,7 +82,10 @@ const handleFaviconError = (event: Event) => {
           <span class="truncate">{{ displayDomain }}</span>
         </div>
       </div>
-      <div v-if="displayImage" class="h-full w-28 sm:w-56 flex-shrink-0">
+      <div
+        v-if="displayImage"
+        class="h-full w-28 sm:w-56 flex-shrink-0"
+      >
         <img
           :src="displayImage"
           :alt="displayTitle"
@@ -90,7 +94,10 @@ const handleFaviconError = (event: Event) => {
       </div>
     </div>
   </ULink>
-  <div v-else class="my-5 p-6 rounded-lg bg-elevated/50 animate-pulse">
+  <div
+    v-else
+    class="my-5 p-6 rounded-lg bg-elevated/50 animate-pulse"
+  >
     <div class="h-6 bg-default rounded w-3/4 mb-2" />
     <div class="h-4 bg-default rounded w-full" />
   </div>
