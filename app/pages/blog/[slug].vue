@@ -21,7 +21,14 @@ useSeoMeta(
     as="article"
   >
     <UPageHeader :title="article.title">
-      <PostedDate :created-at="article.createdAt" />
+      <div class="flex items-baseline flex-wrap gap-x-4 gap-y-1">
+        <PostedDate :created-at="article.createdAt" />
+        <ArticleTags
+          v-if="article.tags?.length"
+          :tags="article.tags"
+          linked
+        />
+      </div>
     </UPageHeader>
 
     <UPageBody>

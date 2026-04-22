@@ -1,10 +1,37 @@
 <script setup lang="ts">
-const { path } = useRoute();
-const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'createdAt', 'tags').order('createdAt', 'DESC').all());
+import { getTagDisplayName } from '~/utils/tags';
+
+const route = useRoute();
+const tag = computed(() => String(route.params.tag));
+const displayName = computed(() => getTagDisplayName(tag.value));
+
+const { data: articles } = await useAsyncData(
+  `tags-${tag.value}`,
+  async () => {
+    const all = await queryCollection('blog')
+      .select('title', 'path', 'description', 'createdAt', 'tags')
+      .order('createdAt', 'DESC')
+      .all();
+    return all.filter(article => article.tags?.includes(tag.value));
+  },
+);
+
+useSeoMeta({
+  title: `${displayName.value} | ryuhei373.dev`,
+  description: `${displayName.value} に関する記事一覧`,
+  ogTitle: `${displayName.value} | ryuhei373.dev`,
+  ogType: 'website',
+  ogDescription: `${displayName.value} に関する記事一覧`,
+  ogUrl: `https://ryuhei373.dev/tags/${tag.value}/`,
+});
 </script>
 
 <template>
-  <UPageList divide>
+  <UPageHeader :title="`#${displayName}`" />
+  <UPageList
+    v-if="articles?.length"
+    divide
+  >
     <UBlogPost
       v-for="article in articles"
       :key="article.path"
@@ -41,4 +68,10 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
       </template>
     </UBlogPost>
   </UPageList>
+  <p
+    v-else
+    class="text-muted text-sm mt-8"
+  >
+    このタグの記事はまだありません。
+  </p>
 </template>
