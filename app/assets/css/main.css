@@ -8,9 +8,11 @@
     Meiryo, sans-serif;
   text-autospace: normal;
   text-underline-offset: 0.3em;
+  word-break: auto-phrase;
+  hanging-punctuation: first allow-end;
 
   /* Nuxt UI variables - must be in :root to override @nuxt/ui defaults */
-  --ui-container: var(--container-3xl);
+  --ui-container: var(--container-6xl);
 
   --ui-bg: light-dark(var(--color-light-bg), var(--color-dark-bg));
   --ui-bg-muted: light-dark(var(--color-light-bg-2), var(--color-dark-bg-2));

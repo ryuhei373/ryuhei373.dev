@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <p class="my-5 leading-7">
+  <p class="my-6 leading-7">
     <slot />
   </p>
 </template>

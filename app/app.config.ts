@@ -5,7 +5,7 @@ export default defineAppConfig({
       dark: 'i-ph-moon-bold',
     },
     container: {
-      base: 'w-full max-w-(--ui-container) mx-auto px-6 md:px-0 lg:px-0 py-8',
+      base: 'w-full max-w-(--ui-container) mx-auto px-6 py-8',
     },
     prose: {
       a: {
@@ -23,6 +23,7 @@ export default defineAppConfig({
     pageHeader: {
       slots: {
         root: 'border-b-0 py-0',
+        title: 'text-[clamp(1.875rem,1.75rem+0.625vw,2.25rem)] sm:text-[clamp(1.875rem,1.75rem+0.625vw,2.25rem)] leading-tight text-pretty font-bold text-highlighted',
       },
     },
   },
