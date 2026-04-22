@@ -16,6 +16,14 @@ const { data: articles } = await useAsyncData(
   },
 );
 
+if (!articles.value?.length) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Tag not found',
+    fatal: true,
+  });
+}
+
 useSeoMeta({
   title: `${displayName.value} | ryuhei373.dev`,
   description: `${displayName.value} に関する記事一覧`,
@@ -28,10 +36,7 @@ useSeoMeta({
 
 <template>
   <UPageHeader :title="`#${displayName}`" />
-  <UPageList
-    v-if="articles?.length"
-    divide
-  >
+  <UPageList divide>
     <UBlogPost
       v-for="article in articles"
       :key="article.path"
@@ -68,10 +73,4 @@ useSeoMeta({
       </template>
     </UBlogPost>
   </UPageList>
-  <p
-    v-else
-    class="text-muted text-sm mt-8"
-  >
-    このタグの記事はまだありません。
-  </p>
 </template>

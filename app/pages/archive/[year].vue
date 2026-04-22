@@ -15,6 +15,14 @@ const { data: articles } = await useAsyncData(
   },
 );
 
+if (!articles.value?.length) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Year not found',
+    fatal: true,
+  });
+}
+
 useSeoMeta({
   title: `${year.value} | ryuhei373.dev`,
   description: `${year.value}年の記事一覧`,
@@ -27,10 +35,7 @@ useSeoMeta({
 
 <template>
   <UPageHeader :title="year" />
-  <UPageList
-    v-if="articles?.length"
-    divide
-  >
+  <UPageList divide>
     <UBlogPost
       v-for="article in articles"
       :key="article.path"
@@ -67,10 +72,4 @@ useSeoMeta({
       </template>
     </UBlogPost>
   </UPageList>
-  <p
-    v-else
-    class="text-muted text-sm mt-8"
-  >
-    この年の記事はまだありません。
-  </p>
 </template>

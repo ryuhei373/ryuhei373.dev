@@ -2,14 +2,22 @@
 const { path } = useRoute();
 const { data: article } = await useAsyncData(path, () => queryCollection('blog').path(path).first());
 
+if (!article.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Article not found',
+    fatal: true,
+  });
+}
+
 useSeoMeta(
   {
-    title: `${article?.value?.title} | ryuhei373.dev`,
-    description: article?.value?.description,
-    twitterTitle: article?.value?.title,
-    ogTitle: article?.value?.title,
+    title: `${article.value.title} | ryuhei373.dev`,
+    description: article.value.description,
+    twitterTitle: article.value.title,
+    ogTitle: article.value.title,
     ogType: 'article',
-    ogDescription: article?.value?.description,
+    ogDescription: article.value.description,
     ogUrl: `https://ryuhei373.dev${path}`,
   },
 );
