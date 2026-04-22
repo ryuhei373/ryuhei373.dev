@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const currentYear = new Date().getFullYear();
-
 const { data: years } = await useAsyncData('footer-archive-years', async () => {
   const posts = await queryCollection('blog').select('createdAt').all();
   const set = new Set<number>();
@@ -118,11 +116,6 @@ const connectLinks = [
           </ul>
         </div>
       </div>
-    </template>
-    <template #left>
-      <p class="text-sm text-muted py-4">
-        © 2024–{{ currentYear }} ryuhei373
-      </p>
     </template>
   </UFooter>
 </template>
