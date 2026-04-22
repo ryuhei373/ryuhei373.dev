@@ -1,10 +1,36 @@
 <script setup lang="ts">
-const { path } = useRoute();
-const { data: articles } = await useAsyncData(path, () => queryCollection('blog').select('title', 'path', 'description', 'createdAt', 'tags').order('createdAt', 'DESC').all());
+const route = useRoute();
+const year = computed(() => String(route.params.year));
+
+const { data: articles } = await useAsyncData(
+  `archive-${year.value}`,
+  async () => {
+    const all = await queryCollection('blog')
+      .select('title', 'path', 'description', 'createdAt', 'tags')
+      .order('createdAt', 'DESC')
+      .all();
+    return all.filter(article =>
+      article.createdAt && new Date(article.createdAt).getFullYear() === Number(year.value),
+    );
+  },
+);
+
+useSeoMeta({
+  title: `${year.value} | ryuhei373.dev`,
+  description: `${year.value}年の記事一覧`,
+  ogTitle: `${year.value} | ryuhei373.dev`,
+  ogType: 'website',
+  ogDescription: `${year.value}年の記事一覧`,
+  ogUrl: `https://ryuhei373.dev/archive/${year.value}/`,
+});
 </script>
 
 <template>
-  <UPageList divide>
+  <UPageHeader :title="year" />
+  <UPageList
+    v-if="articles?.length"
+    divide
+  >
     <UBlogPost
       v-for="article in articles"
       :key="article.path"
@@ -41,4 +67,10 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
       </template>
     </UBlogPost>
   </UPageList>
+  <p
+    v-else
+    class="text-muted text-sm mt-8"
+  >
+    この年の記事はまだありません。
+  </p>
 </template>

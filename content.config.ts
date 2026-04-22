@@ -9,6 +9,7 @@ export default defineContentConfig({
       type: 'page',
       schema: z.object({
         createdAt: z.string(),
+        tags: z.array(z.string()).optional(),
       }),
     }),
   },
