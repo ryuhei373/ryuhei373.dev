@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 
 useSeoMeta({
-  title: `${props.error.statusCode} | ryuhei373.dev`,
+  title: String(props.error.statusCode),
 });
 
 const message = computed(() => {
