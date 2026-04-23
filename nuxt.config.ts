@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     '@nuxt/eslint',
+    '@nuxtjs/seo',
   ],
 
   devtools: { enabled: true },
@@ -20,6 +21,13 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  site: {
+    url: 'https://ryuhei373.dev',
+    name: 'ryuhei373.dev',
+    description: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
+    defaultLocale: 'ja',
+  },
 
   colorMode: {
     preference: 'light',
@@ -74,5 +82,9 @@ export default defineNuxtConfig({
     clientBundle: {
       scan: true,
     },
+  },
+
+  sitemap: {
+    sources: ['/api/__sitemap__/urls'],
   },
 });
