@@ -22,7 +22,7 @@ useHead({
 <template>
   <UApp>
     <AppHeader />
-    <UContainer>
+    <UContainer as="main">
       <div class="max-w-2xl mx-auto">
         <NuxtPage />
       </div>

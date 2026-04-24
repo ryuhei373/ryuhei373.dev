@@ -8,7 +8,10 @@
     }"
   >
     <template #title>
-      <UAvatar src="https://github.com/ryuhei373.png" />
+      <UAvatar
+        src="https://github.com/ryuhei373.png"
+        alt="ryuhei373 のアバター"
+      />
       <span>ryuhei373.dev</span>
     </template>
     <template #right>

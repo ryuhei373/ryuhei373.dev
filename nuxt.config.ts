@@ -62,6 +62,10 @@ export default defineNuxtConfig({
     },
   },
 
+  features: {
+    inlineStyles: true,
+  },
+
   compatibilityDate: '2024-09-03',
 
   nitro: {
