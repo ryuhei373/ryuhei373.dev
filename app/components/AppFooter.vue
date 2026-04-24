@@ -91,7 +91,7 @@ const connectLinks = [
             <li>Built with Nuxt 4 / Nuxt UI / Nuxt Content</li>
             <li>Hosted on Cloudflare Workers</li>
             <li>
-              Color scheme:
+              Themed with
               <ULink
                 to="https://stephango.com/flexoki"
                 target="_blank"
@@ -100,7 +100,6 @@ const connectLinks = [
               >
                 flexoki
               </ULink>
-              by Steph Ango
             </li>
             <li>
               <ULink
