@@ -7,10 +7,6 @@ const props = defineProps<{
   };
 }>();
 
-useSeoMeta({
-  title: `${props.error.statusCode} | ryuhei373.dev`,
-});
-
 const message = computed(() => {
   if (props.error.statusCode === 404) {
     return 'お探しのページは見つかりませんでした。';
