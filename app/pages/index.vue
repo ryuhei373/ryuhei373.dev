@@ -4,12 +4,16 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
 </script>
 
 <template>
-  <UBlogPosts orientation="vertical">
+  <UBlogPosts
+    orientation="vertical"
+    :ui="{ base: 'flex flex-col divide-y divide-default' }"
+  >
     <UBlogPost
       v-for="article in articles"
       :key="article.path"
       variant="naked"
       orientation="vertical"
+      class="py-8"
     >
       <template #body>
         <ULink
