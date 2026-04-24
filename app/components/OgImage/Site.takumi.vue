@@ -12,7 +12,6 @@
       justify-content: center;
       gap: 32px;
       background: #FFFCF0;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
     "
   >
     <img
