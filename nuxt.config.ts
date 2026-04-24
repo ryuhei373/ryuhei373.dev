@@ -84,6 +84,10 @@ export default defineNuxtConfig({
     },
   },
 
+  seo: {
+    fallbackTitle: false,
+  },
+
   sitemap: {
     sources: ['/api/__sitemap__/urls'],
   },
