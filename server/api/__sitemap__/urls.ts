@@ -18,10 +18,10 @@ export default defineSitemapEventHandler(async (event) => {
   }
 
   const archiveUrls: SitemapUrlInput[] = [...years].map(year => ({
-    loc: `/archive/${year}/`,
+    loc: `/archive/${year}`,
   }));
   const tagUrls: SitemapUrlInput[] = [...tags].map(tag => ({
-    loc: `/tags/${tag}/`,
+    loc: `/tags/${tag}`,
   }));
 
   return [...articleUrls, ...archiveUrls, ...tagUrls];
