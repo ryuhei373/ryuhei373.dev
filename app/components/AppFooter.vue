@@ -95,7 +95,7 @@ const connectLinks = [
               <ULink
                 to="https://stephango.com/flexoki"
                 target="_blank"
-                class="hover:text-secondary"
+                class="underline hover:text-secondary"
                 inactive-class="text-primary"
               >
                 flexoki
