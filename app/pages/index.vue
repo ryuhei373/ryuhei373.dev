@@ -6,19 +6,18 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
 <template>
   <UBlogPosts
     orientation="vertical"
-    :ui="{ base: 'flex flex-col divide-y divide-default' }"
+    :ui="{ base: 'flex flex-col gap-0 lg:gap-y-0 divide-y divide-default' }"
   >
     <UBlogPost
       v-for="article in articles"
       :key="article.path"
       variant="naked"
       orientation="vertical"
-      class="py-8"
     >
       <template #body>
         <ULink
           :to="article.path"
-          class="block hover:text-secondary group"
+          class="block py-8 hover:text-secondary group"
           inactive-class="text-primary"
         >
           <h2 class="text-2xl font-bold text-highlighted">
