@@ -19,11 +19,10 @@ const connectLinks = [
   <UFooter
     :ui="{
       root: 'border-t border-muted mt-16',
-      container: 'max-w-(--ui-container) mx-auto px-6',
     }"
   >
     <template #top>
-      <div class="max-w-(--ui-container) mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
+      <UContainer class="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
         <div>
           <h2 class="text-sm font-semibold text-highlighted mb-3">
             Archive
@@ -115,7 +114,7 @@ const connectLinks = [
             </li>
           </ul>
         </div>
-      </div>
+      </UContainer>
     </template>
   </UFooter>
 </template>
