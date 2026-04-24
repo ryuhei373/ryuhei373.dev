@@ -28,6 +28,8 @@ useSeoMeta({
   title: `#${displayName.value}`,
   description: `${displayName.value} に関する記事一覧`,
 });
+
+defineOgImage('Site');
 </script>
 
 <template>

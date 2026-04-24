@@ -27,6 +27,8 @@ useSeoMeta({
   title: year.value,
   description: `${year.value}年の記事一覧`,
 });
+
+defineOgImage('Site');
 </script>
 
 <template>

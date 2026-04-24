@@ -15,6 +15,8 @@ useSeoMeta({
   description: article.value.description,
   ogType: 'article',
 });
+
+defineOgImage('Site');
 </script>
 
 <template>

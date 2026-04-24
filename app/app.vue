@@ -1,10 +1,11 @@
 <script setup lang="ts">
 useSeoMeta({
-  twitterCard: 'summary',
+  twitterCard: 'summary_large_image',
   twitterSite: '@373_3',
-  ogImage: 'https://github.com/ryuhei373.png',
   ogLocale: 'ja_JP',
 });
+
+defineOgImage('Site');
 
 useHead({
   link: [
