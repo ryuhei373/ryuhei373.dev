@@ -73,12 +73,15 @@ const handleFaviconError = (event: Event) => {
           {{ displayDescription }}
         </p>
         <div class="flex items-center gap-1 text-xs text-default">
-          <img
+          <NuxtImg
             :src="faviconUrl"
             :alt="`${displayDomain} favicon`"
+            width="16"
+            height="16"
             class="w-4 h-4"
+            loading="lazy"
             @error="handleFaviconError"
-          >
+          />
           <span class="truncate">{{ displayDomain }}</span>
         </div>
       </div>
@@ -86,11 +89,12 @@ const handleFaviconError = (event: Event) => {
         v-if="displayImage"
         class="h-full w-28 sm:w-56 flex-shrink-0"
       >
-        <img
+        <NuxtImg
           :src="displayImage"
           :alt="displayTitle"
           class="h-full w-full object-cover"
-        >
+          loading="lazy"
+        />
       </div>
     </div>
   </ULink>

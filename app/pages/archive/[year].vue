@@ -24,13 +24,11 @@ if (!articles.value?.length) {
 }
 
 useSeoMeta({
-  title: `${year.value} | ryuhei373.dev`,
+  title: year.value,
   description: `${year.value}年の記事一覧`,
-  ogTitle: `${year.value} | ryuhei373.dev`,
-  ogType: 'website',
-  ogDescription: `${year.value}年の記事一覧`,
-  ogUrl: `https://ryuhei373.dev/archive/${year.value}/`,
 });
+
+defineOgImage('Site');
 </script>
 
 <template>

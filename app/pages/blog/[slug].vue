@@ -10,17 +10,13 @@ if (!article.value) {
   });
 }
 
-useSeoMeta(
-  {
-    title: `${article.value.title} | ryuhei373.dev`,
-    description: article.value.description,
-    twitterTitle: article.value.title,
-    ogTitle: article.value.title,
-    ogType: 'article',
-    ogDescription: article.value.description,
-    ogUrl: `https://ryuhei373.dev${path}`,
-  },
-);
+useSeoMeta({
+  title: article.value.title,
+  description: article.value.description,
+  ogType: 'article',
+});
+
+defineOgImage('Site');
 </script>
 
 <template>

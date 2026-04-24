@@ -25,13 +25,11 @@ if (!articles.value?.length) {
 }
 
 useSeoMeta({
-  title: `${displayName.value} | ryuhei373.dev`,
+  title: `#${displayName.value}`,
   description: `${displayName.value} に関する記事一覧`,
-  ogTitle: `${displayName.value} | ryuhei373.dev`,
-  ogType: 'website',
-  ogDescription: `${displayName.value} に関する記事一覧`,
-  ogUrl: `https://ryuhei373.dev/tags/${tag.value}/`,
 });
+
+defineOgImage('Site');
 </script>
 
 <template>

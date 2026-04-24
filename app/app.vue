@@ -1,18 +1,11 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'ryuhei373.dev',
-  description: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
-  twitterCard: 'summary',
+  twitterCard: 'summary_large_image',
   twitterSite: '@373_3',
-  twitterTitle: 'ryuhei373.dev',
-  ogTitle: 'ryuhei373.dev',
-  ogType: 'website',
-  ogSiteName: 'ryuhei373.dev',
-  ogDescription: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
-  ogImage: 'https://github.com/ryuhei373.png',
   ogLocale: 'ja_JP',
-  ogUrl: 'https://ryuhei373.dev/',
 });
+
+defineOgImage('Site');
 
 useHead({
   link: [
