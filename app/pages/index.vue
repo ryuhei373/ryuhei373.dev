@@ -29,7 +29,7 @@ const { data: articles } = await useAsyncData(path, () => queryCollection('blog'
         </div>
         <p class="text-sm/relaxed text-default mb-5">{{ article.description }}</p>
         <div class="flex justify-end">
-          <div class="group-hover:underline inline-flex items-center gap-1">
+          <div class="underline inline-flex items-center gap-1">
             Read More
             <UIcon
               name="i-ri-arrow-right-s-line"

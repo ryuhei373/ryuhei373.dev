@@ -39,3 +39,24 @@
 * {
   text-decoration-thickness: 1px;
 }
+
+a {
+  transition: color 300ms ease;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 150ms ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
