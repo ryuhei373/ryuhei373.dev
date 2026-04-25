@@ -38,5 +38,7 @@ defineOgImage('Site');
     <UPageBody>
       <ContentRenderer :value="article" />
     </UPageBody>
+
+    <ArticleNavigation :path="path" />
   </UPage>
 </template>
