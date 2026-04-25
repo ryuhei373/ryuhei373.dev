@@ -18,6 +18,7 @@ export default defineNuxtConfig({
         prefix: 'og: <https://ogp.me/ns#>',
       },
     },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
 
   css: ['~/assets/css/main.css'],

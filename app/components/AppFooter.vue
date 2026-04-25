@@ -18,7 +18,7 @@ const connectLinks = [
 <template>
   <UFooter
     :ui="{
-      root: 'border-t border-muted mt-16 bg-muted',
+      root: 'border-t border-default mt-16 bg-elevated',
     }"
   >
     <template #top>
