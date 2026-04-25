@@ -18,7 +18,7 @@ const connectLinks = [
 <template>
   <UFooter
     :ui="{
-      root: 'border-t border-muted mt-16',
+      root: 'border-t border-muted mt-16 bg-muted',
     }"
   >
     <template #top>
@@ -34,7 +34,7 @@ const connectLinks = [
             >
               <ULink
                 :to="`/archive/${year}/`"
-                class="text-sm text-muted hover:text-secondary tabular-nums"
+                class="text-sm text-muted hover:text-secondary underline tabular-nums"
                 active-class=""
                 inactive-class=""
               >
@@ -55,7 +55,7 @@ const connectLinks = [
               <ULink
                 :to="link.url"
                 target="_blank"
-                class="inline-flex items-center gap-2 text-sm text-muted hover:text-secondary"
+                class="inline-flex items-center gap-2 text-sm text-muted hover:text-secondary underline"
                 active-class=""
                 inactive-class=""
               >
@@ -70,7 +70,7 @@ const connectLinks = [
               <ULink
                 to="/rss.xml"
                 external
-                class="inline-flex items-center gap-2 text-sm text-muted hover:text-secondary"
+                class="inline-flex items-center gap-2 text-sm text-muted hover:text-secondary underline"
                 active-class=""
                 inactive-class=""
               >
@@ -96,7 +96,8 @@ const connectLinks = [
                 to="https://stephango.com/flexoki"
                 target="_blank"
                 class="underline hover:text-secondary"
-                inactive-class="text-primary"
+                active-class=""
+                inactive-class=""
               >
                 flexoki
               </ULink>
@@ -105,8 +106,9 @@ const connectLinks = [
               <ULink
                 to="https://github.com/ryuhei373/ryuhei373.dev"
                 target="_blank"
-                class="hover:text-secondary"
-                inactive-class="text-primary"
+                class="underline hover:text-secondary"
+                active-class=""
+                inactive-class=""
               >
                 Source on GitHub
               </ULink>
