@@ -33,7 +33,7 @@ const connectLinks = [
               :key="year"
             >
               <ULink
-                :to="`/archive/${year}/`"
+                :to="`/archive/${year}`"
                 class="text-sm text-muted hover:text-secondary underline tabular-nums"
                 active-class=""
                 inactive-class=""
