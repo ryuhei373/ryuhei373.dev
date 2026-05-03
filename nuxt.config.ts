@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-
   modules: [
     '@nuxt/ui',
     '@nuxt/content',
@@ -26,7 +25,8 @@ export default defineNuxtConfig({
   site: {
     url: 'https://ryuhei373.dev',
     name: 'ryuhei373.dev',
-    description: '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
+    description:
+      '猫2匹と暮らしているWebアプリケーション開発者。HTMLとCSSが好き。',
     defaultLocale: 'ja',
   },
 
@@ -93,6 +93,14 @@ export default defineNuxtConfig({
     clientBundle: {
       scan: true,
     },
+  },
+
+  image: {
+    provider: 'cloudflare',
+    cloudflare: {
+      baseURL: 'https://images.ryuhei373.dev',
+    },
+    domains: ['images.ryuhei373.dev'],
   },
 
   ogImage: {
