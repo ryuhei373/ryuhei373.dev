@@ -1,12 +1,15 @@
-export const tagDisplayNames: Record<string, string> = {
+export const tagDisplayNames = {
   ddr: 'DDR',
-  sake: '日本酒',
+  cloudflare: 'Cloudflare',
   nuxt: 'Nuxt',
-  dev: '開発',
   life: '暮らし',
   recap: '振り返り',
-};
+} as const;
+
+export type TagSlug = keyof typeof tagDisplayNames;
+
+export const tagSlugs = Object.keys(tagDisplayNames) as [TagSlug, ...TagSlug[]];
 
 export const getTagDisplayName = (slug: string): string => {
-  return tagDisplayNames[slug] ?? slug;
+  return tagDisplayNames[slug as TagSlug] ?? slug;
 };
