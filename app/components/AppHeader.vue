@@ -9,6 +9,7 @@
   >
     <template #title>
       <UAvatar
+        :as="{ img: 'img' }"
         src="https://github.com/ryuhei373.png"
         alt="ryuhei373 のアバター"
       />
