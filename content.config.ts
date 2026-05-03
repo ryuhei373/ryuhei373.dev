@@ -1,4 +1,5 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content';
+import { tagSlugs } from './app/utils/tags';
 
 export default defineContentConfig({
   collections: {
@@ -9,7 +10,7 @@ export default defineContentConfig({
       type: 'page',
       schema: z.object({
         createdAt: z.string(),
-        tags: z.array(z.string()).optional(),
+        tags: z.array(z.enum(tagSlugs)).optional(),
       }),
     }),
   },
