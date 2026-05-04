@@ -14,7 +14,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix . ",
     "textlint": "textlint \"content/**/*.md\"",
-    "textlint:fix": "textlint --fix \"content/**/*.md\""
+    "textlint:fix": "textlint --fix \"content/**/*.md\"",
+    "pick": "tools/r2-image-picker/target/release/r2-image-picker",
+    "pick:build": "cargo build --release --manifest-path tools/r2-image-picker/Cargo.toml"
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
