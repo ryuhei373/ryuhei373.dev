@@ -8,7 +8,7 @@ export default defineNuxtPlugin({
     const err = useError();
     const site = useSiteConfig();
     useHead({
-      title: () => err.value ? `${err.value.statusCode} | ${site.name}` : null,
+      title: () => err.value ? `${err.value.status} | ${site.name}` : null,
     });
   },
 });
