@@ -17,6 +17,7 @@ echo "---
 title: $TODAY
 createdAt: $TODAY
 updatedAt: $TODAY
+tags: []
 ---
 
 <!--more-->
