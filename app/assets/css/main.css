@@ -8,7 +8,6 @@
     Meiryo, sans-serif;
   text-autospace: normal;
   text-underline-offset: 0.3em;
-  word-break: auto-phrase;
   hanging-punctuation: first allow-end;
 
   /* Nuxt UI variables - must be in :root to override @nuxt/ui defaults */
@@ -29,7 +28,10 @@
 
   --ui-border: light-dark(var(--color-light-ui-2), var(--color-dark-ui-2));
   --ui-border-muted: light-dark(var(--color-light-ui), var(--color-dark-ui));
-  --ui-border-accented: light-dark(var(--color-light-ui-3), var(--color-dark-ui-3));
+  --ui-border-accented: light-dark(
+    var(--color-light-ui-3),
+    var(--color-dark-ui-3)
+  );
   --ui-border-inverted: light-dark(var(--color-dark-bg), var(--color-light-bg));
 
   --ui-primary: light-dark(var(--color-light-or), var(--color-dark-or));
@@ -55,7 +57,9 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
   }
