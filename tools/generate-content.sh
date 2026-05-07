@@ -16,7 +16,6 @@ git checkout -b "$BRANCH_NAME"
 echo "---
 title: $TODAY
 createdAt: $TODAY
-updatedAt: $TODAY
 tags: []
 ---
 
