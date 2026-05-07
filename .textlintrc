@@ -5,8 +5,11 @@
       "sentence-length": {
         "max": 150
       },
-      "max-comma": {
+      "max-ten": {
         "max": 4
+      },
+      "ja-no-mixed-period": {
+        "allowPeriodMarks": ["}"]
       },
       "no-exclamation-question-mark": false,
       "ja-no-weak-phrase": false,
