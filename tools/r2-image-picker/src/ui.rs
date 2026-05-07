@@ -4,7 +4,7 @@ use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph};
+use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 use ratatui_image::StatefulImage;
 
 use crate::app::{App, MessageKind};
@@ -91,7 +91,8 @@ fn render_preview_pane(frame: &mut Frame, app: &mut App, area: Rect) {
         None => "(no objects)".into(),
     };
     let info = Paragraph::new(info_text)
-        .block(Block::default().borders(Borders::ALL).title(" Info "));
+        .block(Block::default().borders(Borders::ALL).title(" Info "))
+        .wrap(Wrap { trim: false });
     frame.render_widget(info, chunks[1]);
 }
 

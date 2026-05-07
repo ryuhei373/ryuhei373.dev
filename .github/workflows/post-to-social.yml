@@ -1,11 +1,8 @@
 name: Post to Social Media
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'content/blog/**'
+  check_run:
+    types: [completed]
 
 permissions:
   contents: read
@@ -13,11 +10,16 @@ permissions:
 
 jobs:
   post:
+    if: >-
+      github.event.check_run.name == 'Workers Builds: ryuhei373' &&
+      github.event.check_run.conclusion == 'success' &&
+      github.event.check_run.check_suite.head_branch == 'main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.check_run.head_sha }}
           fetch-depth: 2
 
       - name: Get new blog posts
@@ -57,7 +59,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # マージコミットから関連するPR番号を取得
-          PR_NUMBER=$(gh pr list --state merged --search "${{ github.sha }}" --json number --jq '.[0].number')
+          PR_NUMBER=$(gh pr list --state merged --search "${{ github.event.check_run.head_sha }}" --json number --jq '.[0].number')
 
           if [ -z "$PR_NUMBER" ]; then
             # 直接pushの場合はコミットメッセージからPR番号を探す
