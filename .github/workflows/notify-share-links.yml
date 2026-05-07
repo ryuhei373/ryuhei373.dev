@@ -77,7 +77,7 @@ jobs:
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: "📢 *新しいブログ記事が公開されました*\n*\($title)*\n\($url)"
+                    text: "📢 新しいブログ記事が公開されました\n\($title)\n\($url)"
                   }
                 },
                 {
