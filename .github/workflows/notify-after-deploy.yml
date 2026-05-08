@@ -1,0 +1,132 @@
+name: Notify After Deploy
+
+on:
+  check_run:
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: >-
+      github.event.check_run.name == 'Workers Builds: ryuhei373' &&
+      github.event.check_run.conclusion == 'success' &&
+      github.event.check_run.check_suite.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.check_run.head_sha }}
+          fetch-depth: 2
+
+      - name: Get commit info
+        id: commit
+        run: |
+          SHA="${{ github.event.check_run.head_sha }}"
+          SHORT_SHA=$(git rev-parse --short "$SHA")
+          SUBJECT=$(git log -1 --pretty=%s "$SHA")
+          COMMIT_URL="${{ github.server_url }}/${{ github.repository }}/commit/$SHA"
+          {
+            echo "short_sha=$SHORT_SHA"
+            echo "subject=$SUBJECT"
+            echo "commit_url=$COMMIT_URL"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Get new blog posts
+        id: new-posts
+        run: |
+          # 新規追加されたファイルのみ取得（--no-renamesでリネーム検出を無効化）
+          NEW_FILES=$(git diff --no-renames --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.md')
+
+          if [ -z "$NEW_FILES" ]; then
+            echo "has_new_posts=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "has_new_posts=true" >> "$GITHUB_OUTPUT"
+
+          # 最初の新規ファイルを処理（複数記事の同時追加は想定外）
+          FILE=$(echo "$NEW_FILES" | head -n 1)
+
+          # frontmatterからタイトルを取得
+          TITLE=$(sed -n '/^---$/,/^---$/p' "$FILE" | grep '^title:' | sed 's/^title: *//')
+
+          # ファイル名からスラッグを取得（例: 2026-01-12.md -> 2026-01-12）
+          SLUG=$(basename "$FILE" .md)
+
+          {
+            echo "title=$TITLE"
+            echo "url=https://ryuhei373.dev/blog/$SLUG"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Notify Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          SHORT_SHA="${{ steps.commit.outputs.short_sha }}"
+          SUBJECT="${{ steps.commit.outputs.subject }}"
+          COMMIT_URL="${{ steps.commit.outputs.commit_url }}"
+          HAS_BLOG="${{ steps.new-posts.outputs.has_new_posts }}"
+          TITLE="${{ steps.new-posts.outputs.title }}"
+          URL="${{ steps.new-posts.outputs.url }}"
+
+          # デプロイ完了 block（必ず含める）
+          BASE_BLOCK=$(jq -n \
+            --arg sha "$SHORT_SHA" \
+            --arg subject "$SUBJECT" \
+            --arg commit_url "$COMMIT_URL" \
+            '{
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: "✅ デプロイ完了\n<\($commit_url)|\($sha)> \($subject)"
+              }
+            }')
+
+          # ブログ更新がある場合のみ追加 block を構築
+          if [ "$HAS_BLOG" = "true" ]; then
+            ENCODED_TEXT=$(printf '%s' "$TITLE $URL" | jq -sRr @uri)
+            X_INTENT="https://twitter.com/intent/tweet?text=${ENCODED_TEXT}"
+            BSKY_INTENT="https://bsky.app/intent/compose?text=${ENCODED_TEXT}"
+
+            BLOG_BLOCKS=$(jq -n \
+              --arg title "$TITLE" \
+              --arg url "$URL" \
+              --arg x_intent "$X_INTENT" \
+              --arg bsky_intent "$BSKY_INTENT" \
+              '[
+                {type: "divider"},
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: "📢 新しいブログ記事が公開されました\n\($title)\n\($url)"
+                  }
+                },
+                {
+                  type: "actions",
+                  elements: [
+                    {type: "button", text: {type: "plain_text", text: "X でポスト"}, url: $x_intent},
+                    {type: "button", text: {type: "plain_text", text: "Bluesky でポスト"}, url: $bsky_intent}
+                  ]
+                }
+              ]')
+            FALLBACK="デプロイ完了 / 新規記事: $TITLE"
+          else
+            BLOG_BLOCKS="[]"
+            FALLBACK="デプロイ完了: $SUBJECT"
+          fi
+
+          PAYLOAD=$(jq -n \
+            --arg fallback "$FALLBACK" \
+            --argjson base "$BASE_BLOCK" \
+            --argjson blog "$BLOG_BLOCKS" \
+            '{
+              text: $fallback,
+              blocks: ([$base] + $blog)
+            }')
+
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"
