@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   notify:
@@ -21,17 +22,32 @@ jobs:
           ref: ${{ github.event.check_run.head_sha }}
           fetch-depth: 2
 
-      - name: Get commit info
-        id: commit
+      - name: Resolve deploy ref (PR fallback to commit)
+        id: ref
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           SHA="${{ github.event.check_run.head_sha }}"
-          SHORT_SHA=$(git rev-parse --short "$SHA")
-          SUBJECT=$(git log -1 --pretty=%s "$SHA")
-          COMMIT_URL="${{ github.server_url }}/${{ github.repository }}/commit/$SHA"
+
+          # PR を逆引き（merge コミットの SHA が含まれる merged PR を探す）
+          PR_INFO=$(gh pr list --state merged --search "$SHA" \
+            --json number,title,url --jq '.[0]' || echo "null")
+
+          if [ "$PR_INFO" != "null" ] && [ -n "$PR_INFO" ]; then
+            REF_LABEL="#$(echo "$PR_INFO" | jq -r '.number')"
+            REF_TITLE=$(echo "$PR_INFO" | jq -r '.title')
+            REF_URL=$(echo "$PR_INFO" | jq -r '.url')
+          else
+            # 直接 push 等で PR が見つからない場合は commit に fallback
+            REF_LABEL=$(git rev-parse --short "$SHA")
+            REF_TITLE=$(git log -1 --pretty=%s "$SHA")
+            REF_URL="${{ github.server_url }}/${{ github.repository }}/commit/$SHA"
+          fi
+
           {
-            echo "short_sha=$SHORT_SHA"
-            echo "subject=$SUBJECT"
-            echo "commit_url=$COMMIT_URL"
+            echo "label=$REF_LABEL"
+            echo "title=$REF_TITLE"
+            echo "url=$REF_URL"
           } >> "$GITHUB_OUTPUT"
 
       - name: Get new blog posts
@@ -65,23 +81,23 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          SHORT_SHA="${{ steps.commit.outputs.short_sha }}"
-          SUBJECT="${{ steps.commit.outputs.subject }}"
-          COMMIT_URL="${{ steps.commit.outputs.commit_url }}"
+          REF_LABEL="${{ steps.ref.outputs.label }}"
+          REF_TITLE="${{ steps.ref.outputs.title }}"
+          REF_URL="${{ steps.ref.outputs.url }}"
           HAS_BLOG="${{ steps.new-posts.outputs.has_new_posts }}"
           TITLE="${{ steps.new-posts.outputs.title }}"
           URL="${{ steps.new-posts.outputs.url }}"
 
           # デプロイ完了 block（必ず含める）
           BASE_BLOCK=$(jq -n \
-            --arg sha "$SHORT_SHA" \
-            --arg subject "$SUBJECT" \
-            --arg commit_url "$COMMIT_URL" \
+            --arg label "$REF_LABEL" \
+            --arg title "$REF_TITLE" \
+            --arg url "$REF_URL" \
             '{
               type: "section",
               text: {
                 type: "mrkdwn",
-                text: "✅ デプロイ完了\n<\($commit_url)|\($sha)> \($subject)"
+                text: "✅ デプロイ完了\n<\($url)|\($label)> \($title)"
               }
             }')
 
@@ -116,7 +132,7 @@ jobs:
             FALLBACK="デプロイ完了 / 新規記事: $TITLE"
           else
             BLOG_BLOCKS="[]"
-            FALLBACK="デプロイ完了: $SUBJECT"
+            FALLBACK="デプロイ完了: $REF_TITLE"
           fi
 
           PAYLOAD=$(jq -n \
