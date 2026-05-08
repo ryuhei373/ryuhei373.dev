@@ -1,4 +1,4 @@
-name: Post to Social Media
+name: Notify Share Links After Deploy
 
 on:
   check_run:
@@ -6,10 +6,9 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
-  post:
+  notify:
     if: >-
       github.event.check_run.name == 'Workers Builds: ryuhei373' &&
       github.event.check_run.conclusion == 'success' &&
@@ -52,49 +51,52 @@ jobs:
           URL="https://ryuhei373.dev/blog/$SLUG"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Get merged PR number
+      - name: Notify Slack with share links
         if: steps.new-posts.outputs.has_new_posts == 'true'
-        id: get-pr
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # マージコミットから関連するPR番号を取得
-          PR_NUMBER=$(gh pr list --state merged --search "${{ github.event.check_run.head_sha }}" --json number --jq '.[0].number')
-
-          if [ -z "$PR_NUMBER" ]; then
-            # 直接pushの場合はコミットメッセージからPR番号を探す
-            PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K[0-9]+' | head -1)
-          fi
-
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
-
-      - name: Comment on PR with share links
-        if: steps.new-posts.outputs.has_new_posts == 'true' && steps.get-pr.outputs.pr_number != ''
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           TITLE="${{ steps.new-posts.outputs.title }}"
           URL="${{ steps.new-posts.outputs.url }}"
-          PR_NUMBER="${{ steps.get-pr.outputs.pr_number }}"
 
           # URLエンコード（jqを使用）
           ENCODED_TEXT=$(printf '%s' "$TITLE $URL" | jq -sRr @uri)
-
-          # Intent URLs
           X_INTENT="https://twitter.com/intent/tweet?text=${ENCODED_TEXT}"
           BSKY_INTENT="https://bsky.app/intent/compose?text=${ENCODED_TEXT}"
 
-          # PRにコメント
-          BODY=$(printf '%s\n' \
-            "## 📢 SNSでシェア" \
-            "" \
-            "新しいブログ記事が公開されました！" \
-            "" \
-            "**${TITLE}**" \
-            "${URL}" \
-            "" \
-            "以下のリンクからSNSに投稿できます：" \
-            "" \
-            "- [X (Twitter) でポスト](${X_INTENT})" \
-            "- [Bluesky でポスト](${BSKY_INTENT})")
-          gh pr comment "$PR_NUMBER" --body "$BODY"
+          # Slack Block Kit でボタン付きメッセージを構築
+          PAYLOAD=$(jq -n \
+            --arg title "$TITLE" \
+            --arg url "$URL" \
+            --arg x_intent "$X_INTENT" \
+            --arg bsky_intent "$BSKY_INTENT" \
+            '{
+              text: "新しいブログ記事が公開されました: \($title)",
+              blocks: [
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: "📢 新しいブログ記事が公開されました\n\($title)\n\($url)"
+                  }
+                },
+                {
+                  type: "actions",
+                  elements: [
+                    {
+                      type: "button",
+                      text: {type: "plain_text", text: "X でポスト"},
+                      url: $x_intent
+                    },
+                    {
+                      type: "button",
+                      text: {type: "plain_text", text: "Bluesky でポスト"},
+                      url: $bsky_intent
+                    }
+                  ]
+                }
+              ]
+            }')
+
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"
