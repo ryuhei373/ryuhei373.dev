@@ -24,7 +24,7 @@ defineProps({
     >
       <ULink
         v-if="linked"
-        :to="`/tags/${tag}/`"
+        :to="`/tags/${tag}`"
         class="text-muted text-sm hover:text-primary"
         active-class=""
         inactive-class=""

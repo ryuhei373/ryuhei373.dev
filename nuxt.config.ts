@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: {
         lang: 'ja',
-        prefix: 'og: <https://ogp.me/ns#>',
+        prefix: 'og: https://ogp.me/ns#',
       },
     },
     pageTransition: { name: 'page', mode: 'out-in' },
