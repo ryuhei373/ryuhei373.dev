@@ -15,6 +15,15 @@ export default defineAppConfig({
         base: 'px-1.5 py-0.5 text-sm font-mono font-medium rounded-md inline-block break-words max-w-full',
       },
     },
+    kbd: {
+      compoundVariants: [
+        {
+          color: 'neutral',
+          variant: 'outline',
+          class: 'ring-0 border border-muted bg-muted text-default',
+        },
+      ],
+    },
     page: {
       slots: {
         root: 'mt-8',

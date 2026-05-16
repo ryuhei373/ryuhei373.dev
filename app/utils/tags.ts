@@ -2,8 +2,8 @@ export const tagDisplayNames = {
   ddr: 'DDR',
   cloudflare: 'Cloudflare',
   nuxt: 'Nuxt',
-  life: '暮らし',
-  recap: '振り返り',
+  life: 'Life',
+  recap: 'Recap',
 } as const;
 
 export type TagSlug = keyof typeof tagDisplayNames;

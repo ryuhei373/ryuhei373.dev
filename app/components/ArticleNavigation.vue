@@ -40,7 +40,7 @@ const scrollToTop = () => {
             name="i-ri-arrow-left-s-line"
             class="size-4 transition-transform group-hover:-translate-x-0.5"
           />
-          前の記事
+          新しい記事
         </span>
         <h3 class="mt-2 text-lg font-bold text-highlighted leading-snug decoration-1 underline-offset-4 group-hover:text-secondary group-hover:underline">
           {{ prev.title }}
@@ -55,7 +55,7 @@ const scrollToTop = () => {
         inactive-class=""
       >
         <span class="inline-flex items-center gap-1 text-xs tracking-wider text-muted">
-          次の記事
+          過去の記事
           <UIcon
             name="i-ri-arrow-right-s-line"
             class="size-4 transition-transform group-hover:translate-x-0.5"
