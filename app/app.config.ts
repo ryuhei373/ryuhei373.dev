@@ -1,5 +1,12 @@
 export default defineAppConfig({
   ui: {
+    // カスタムカラーテーマの適用（Nuxt UI 公式ルート）。
+    // スケール定義は assets/css/initialize.css の @theme、シェード調整は main.css
+    colors: {
+      primary: 'orange',
+      secondary: 'orange',
+      neutral: 'flexoki-base',
+    },
     icons: {
       light: 'i-ph-sun-bold',
       dark: 'i-ph-moon-bold',
