@@ -7,36 +7,22 @@
  */
 
 @theme {
-  --color-amber-*: initial;
-  --color-lime-*: initial;
-  --color-emerald-*: initial;
-  --color-teal-*: initial;
-  --color-sky-*: initial;
-  --color-indigo-*: initial;
-  --color-violet-*: initial;
-  --color-fuchsia-*: initial;
-  --color-pink-*: initial;
-  --color-rose-*: initial;
-  --color-slate-*: initial;
-  --color-zinc-*: initial;
-  --color-neutral-*: initial;
-
   --color-black: #100f0f;
   --color-paper: #fffcf0;
 
-  --color-base-50: #f2f0e5;
-  --color-base-100: #e6e4d9;
-  --color-base-150: #dad8ce;
-  --color-base-200: #cecdc3;
-  --color-base-300: #b7b5ac;
-  --color-base-400: #9f9d96;
-  --color-base-500: #878580;
-  --color-base-600: #6f6e69;
-  --color-base-700: #575653;
-  --color-base-800: #403e3c;
-  --color-base-850: #343331;
-  --color-base-900: #282726;
-  --color-base-950: #1c1b1a;
+  --color-flexoki-base-50: #f2f0e5;
+  --color-flexoki-base-100: #e6e4d9;
+  --color-flexoki-base-150: #dad8ce;
+  --color-flexoki-base-200: #cecdc3;
+  --color-flexoki-base-300: #b7b5ac;
+  --color-flexoki-base-400: #9f9d96;
+  --color-flexoki-base-500: #878580;
+  --color-flexoki-base-600: #6f6e69;
+  --color-flexoki-base-700: #575653;
+  --color-flexoki-base-800: #403e3c;
+  --color-flexoki-base-850: #343331;
+  --color-flexoki-base-900: #282726;
+  --color-flexoki-base-950: #1c1b1a;
 
   --color-red-50: #ffe1d5;
   --color-red-100: #ffcabb;
@@ -150,59 +136,193 @@
   --color-magenta-900: #39172b;
   --color-magenta-950: #24131d;
 }
-  
+
+/**
+ * Tailwind デフォルトパレットの全スケールを最近傍の Flexoki 色へエイリアスする。
+ * 名前空間を消しっぱなしにすると `border-neutral-800` 等の utility が
+ * 未定義変数 → currentColor に化けるため、必ず代替を供給する。
+ * どの色クラスを使っても Flexoki の色域に収まる。
+ */
 @theme inline {
-  --color-light-bg: var(--color-paper);
-  --color-light-bg-2: var(--color-base-50);
-  --color-light-tx: var(--color-black);
-  --color-light-tx-2: var(--color-base-600);
-  --color-light-tx-3: var(--color-base-300);
-  --color-light-ui: var(--color-base-100);
-  --color-light-ui-2: var(--color-base-150);
-  --color-light-ui-3: var(--color-base-200);
+  /* grayscale 5種 → flexoki-base */
+  --color-slate-50: var(--color-flexoki-base-50);
+  --color-slate-100: var(--color-flexoki-base-100);
+  --color-slate-200: var(--color-flexoki-base-200);
+  --color-slate-300: var(--color-flexoki-base-300);
+  --color-slate-400: var(--color-flexoki-base-400);
+  --color-slate-500: var(--color-flexoki-base-500);
+  --color-slate-600: var(--color-flexoki-base-600);
+  --color-slate-700: var(--color-flexoki-base-700);
+  --color-slate-800: var(--color-flexoki-base-800);
+  --color-slate-900: var(--color-flexoki-base-900);
+  --color-slate-950: var(--color-flexoki-base-950);
 
-  --color-dark-bg: var(--color-black);
-  --color-dark-bg-2: var(--color-base-950);
-  --color-dark-tx: var(--color-base-200);
-  --color-dark-tx-2: var(--color-base-500);
-  --color-dark-tx-3: var(--color-base-700);
-  --color-dark-ui: var(--color-base-900);
-  --color-dark-ui-2: var(--color-base-850);
-  --color-dark-ui-3: var(--color-base-800);
+  --color-gray-50: var(--color-flexoki-base-50);
+  --color-gray-100: var(--color-flexoki-base-100);
+  --color-gray-200: var(--color-flexoki-base-200);
+  --color-gray-300: var(--color-flexoki-base-300);
+  --color-gray-400: var(--color-flexoki-base-400);
+  --color-gray-500: var(--color-flexoki-base-500);
+  --color-gray-600: var(--color-flexoki-base-600);
+  --color-gray-700: var(--color-flexoki-base-700);
+  --color-gray-800: var(--color-flexoki-base-800);
+  --color-gray-900: var(--color-flexoki-base-900);
+  --color-gray-950: var(--color-flexoki-base-950);
 
-  --color-light-re: var(--color-red-600);
-  --color-light-or: var(--color-orange-600);
-  --color-light-ye: var(--color-yellow-600);
-  --color-light-gr: var(--color-green-600);
-  --color-light-cy: var(--color-cyan-600);
-  --color-light-bl: var(--color-blue-600);
-  --color-light-pu: var(--color-purple-600);
-  --color-light-ma: var(--color-magenta-600);
+  --color-zinc-50: var(--color-flexoki-base-50);
+  --color-zinc-100: var(--color-flexoki-base-100);
+  --color-zinc-200: var(--color-flexoki-base-200);
+  --color-zinc-300: var(--color-flexoki-base-300);
+  --color-zinc-400: var(--color-flexoki-base-400);
+  --color-zinc-500: var(--color-flexoki-base-500);
+  --color-zinc-600: var(--color-flexoki-base-600);
+  --color-zinc-700: var(--color-flexoki-base-700);
+  --color-zinc-800: var(--color-flexoki-base-800);
+  --color-zinc-900: var(--color-flexoki-base-900);
+  --color-zinc-950: var(--color-flexoki-base-950);
 
-  --color-dark-re: var(--color-red-400);
-  --color-dark-or: var(--color-orange-400);
-  --color-dark-ye: var(--color-yellow-400);
-  --color-dark-gr: var(--color-green-400);
-  --color-dark-cy: var(--color-cyan-400);
-  --color-dark-bl: var(--color-blue-400);
-  --color-dark-pu: var(--color-purple-400);
-  --color-dark-ma: var(--color-magenta-400);
+  --color-neutral-50: var(--color-flexoki-base-50);
+  --color-neutral-100: var(--color-flexoki-base-100);
+  --color-neutral-200: var(--color-flexoki-base-200);
+  --color-neutral-300: var(--color-flexoki-base-300);
+  --color-neutral-400: var(--color-flexoki-base-400);
+  --color-neutral-500: var(--color-flexoki-base-500);
+  --color-neutral-600: var(--color-flexoki-base-600);
+  --color-neutral-700: var(--color-flexoki-base-700);
+  --color-neutral-800: var(--color-flexoki-base-800);
+  --color-neutral-900: var(--color-flexoki-base-900);
+  --color-neutral-950: var(--color-flexoki-base-950);
 
-  --color-light-re-2: var(--color-red-400);
-  --color-light-or-2: var(--color-orange-400);
-  --color-light-ye-2: var(--color-yellow-400);
-  --color-light-gr-2: var(--color-green-400);
-  --color-light-cy-2: var(--color-cyan-400);
-  --color-light-bl-2: var(--color-blue-400);
-  --color-light-pu-2: var(--color-purple-400);
-  --color-light-ma-2: var(--color-magenta-400);
+  --color-stone-50: var(--color-flexoki-base-50);
+  --color-stone-100: var(--color-flexoki-base-100);
+  --color-stone-200: var(--color-flexoki-base-200);
+  --color-stone-300: var(--color-flexoki-base-300);
+  --color-stone-400: var(--color-flexoki-base-400);
+  --color-stone-500: var(--color-flexoki-base-500);
+  --color-stone-600: var(--color-flexoki-base-600);
+  --color-stone-700: var(--color-flexoki-base-700);
+  --color-stone-800: var(--color-flexoki-base-800);
+  --color-stone-900: var(--color-flexoki-base-900);
+  --color-stone-950: var(--color-flexoki-base-950);
 
-  --color-dark-re-2: var(--color-red-600);
-  --color-dark-or-2: var(--color-orange-600);
-  --color-dark-ye-2: var(--color-yellow-600);
-  --color-dark-gr-2: var(--color-green-600);
-  --color-dark-cy-2: var(--color-cyan-600);
-  --color-dark-bl-2: var(--color-blue-600);
-  --color-dark-pu-2: var(--color-purple-600);
-  --color-dark-ma-2: var(--color-magenta-600);
+  /* 有彩色 → 最近傍の Flexoki 色 */
+  --color-amber-50: var(--color-orange-50);
+  --color-amber-100: var(--color-orange-100);
+  --color-amber-200: var(--color-orange-200);
+  --color-amber-300: var(--color-orange-300);
+  --color-amber-400: var(--color-orange-400);
+  --color-amber-500: var(--color-orange-500);
+  --color-amber-600: var(--color-orange-600);
+  --color-amber-700: var(--color-orange-700);
+  --color-amber-800: var(--color-orange-800);
+  --color-amber-900: var(--color-orange-900);
+  --color-amber-950: var(--color-orange-950);
+
+  --color-lime-50: var(--color-green-50);
+  --color-lime-100: var(--color-green-100);
+  --color-lime-200: var(--color-green-200);
+  --color-lime-300: var(--color-green-300);
+  --color-lime-400: var(--color-green-400);
+  --color-lime-500: var(--color-green-500);
+  --color-lime-600: var(--color-green-600);
+  --color-lime-700: var(--color-green-700);
+  --color-lime-800: var(--color-green-800);
+  --color-lime-900: var(--color-green-900);
+  --color-lime-950: var(--color-green-950);
+
+  --color-emerald-50: var(--color-green-50);
+  --color-emerald-100: var(--color-green-100);
+  --color-emerald-200: var(--color-green-200);
+  --color-emerald-300: var(--color-green-300);
+  --color-emerald-400: var(--color-green-400);
+  --color-emerald-500: var(--color-green-500);
+  --color-emerald-600: var(--color-green-600);
+  --color-emerald-700: var(--color-green-700);
+  --color-emerald-800: var(--color-green-800);
+  --color-emerald-900: var(--color-green-900);
+  --color-emerald-950: var(--color-green-950);
+
+  --color-teal-50: var(--color-cyan-50);
+  --color-teal-100: var(--color-cyan-100);
+  --color-teal-200: var(--color-cyan-200);
+  --color-teal-300: var(--color-cyan-300);
+  --color-teal-400: var(--color-cyan-400);
+  --color-teal-500: var(--color-cyan-500);
+  --color-teal-600: var(--color-cyan-600);
+  --color-teal-700: var(--color-cyan-700);
+  --color-teal-800: var(--color-cyan-800);
+  --color-teal-900: var(--color-cyan-900);
+  --color-teal-950: var(--color-cyan-950);
+
+  --color-sky-50: var(--color-blue-50);
+  --color-sky-100: var(--color-blue-100);
+  --color-sky-200: var(--color-blue-200);
+  --color-sky-300: var(--color-blue-300);
+  --color-sky-400: var(--color-blue-400);
+  --color-sky-500: var(--color-blue-500);
+  --color-sky-600: var(--color-blue-600);
+  --color-sky-700: var(--color-blue-700);
+  --color-sky-800: var(--color-blue-800);
+  --color-sky-900: var(--color-blue-900);
+  --color-sky-950: var(--color-blue-950);
+
+  --color-indigo-50: var(--color-blue-50);
+  --color-indigo-100: var(--color-blue-100);
+  --color-indigo-200: var(--color-blue-200);
+  --color-indigo-300: var(--color-blue-300);
+  --color-indigo-400: var(--color-blue-400);
+  --color-indigo-500: var(--color-blue-500);
+  --color-indigo-600: var(--color-blue-600);
+  --color-indigo-700: var(--color-blue-700);
+  --color-indigo-800: var(--color-blue-800);
+  --color-indigo-900: var(--color-blue-900);
+  --color-indigo-950: var(--color-blue-950);
+
+  --color-violet-50: var(--color-purple-50);
+  --color-violet-100: var(--color-purple-100);
+  --color-violet-200: var(--color-purple-200);
+  --color-violet-300: var(--color-purple-300);
+  --color-violet-400: var(--color-purple-400);
+  --color-violet-500: var(--color-purple-500);
+  --color-violet-600: var(--color-purple-600);
+  --color-violet-700: var(--color-purple-700);
+  --color-violet-800: var(--color-purple-800);
+  --color-violet-900: var(--color-purple-900);
+  --color-violet-950: var(--color-purple-950);
+
+  --color-fuchsia-50: var(--color-magenta-50);
+  --color-fuchsia-100: var(--color-magenta-100);
+  --color-fuchsia-200: var(--color-magenta-200);
+  --color-fuchsia-300: var(--color-magenta-300);
+  --color-fuchsia-400: var(--color-magenta-400);
+  --color-fuchsia-500: var(--color-magenta-500);
+  --color-fuchsia-600: var(--color-magenta-600);
+  --color-fuchsia-700: var(--color-magenta-700);
+  --color-fuchsia-800: var(--color-magenta-800);
+  --color-fuchsia-900: var(--color-magenta-900);
+  --color-fuchsia-950: var(--color-magenta-950);
+
+  --color-pink-50: var(--color-magenta-50);
+  --color-pink-100: var(--color-magenta-100);
+  --color-pink-200: var(--color-magenta-200);
+  --color-pink-300: var(--color-magenta-300);
+  --color-pink-400: var(--color-magenta-400);
+  --color-pink-500: var(--color-magenta-500);
+  --color-pink-600: var(--color-magenta-600);
+  --color-pink-700: var(--color-magenta-700);
+  --color-pink-800: var(--color-magenta-800);
+  --color-pink-900: var(--color-magenta-900);
+  --color-pink-950: var(--color-magenta-950);
+
+  --color-rose-50: var(--color-red-50);
+  --color-rose-100: var(--color-red-100);
+  --color-rose-200: var(--color-red-200);
+  --color-rose-300: var(--color-red-300);
+  --color-rose-400: var(--color-red-400);
+  --color-rose-500: var(--color-red-500);
+  --color-rose-600: var(--color-red-600);
+  --color-rose-700: var(--color-red-700);
+  --color-rose-800: var(--color-red-800);
+  --color-rose-900: var(--color-red-900);
+  --color-rose-950: var(--color-red-950);
 }
