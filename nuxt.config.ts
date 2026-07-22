@@ -109,6 +109,10 @@ export default defineNuxtConfig({
 
   seo: {
     fallbackTitle: false,
+    // prerender 時の inline style minify が body 内の Shiki 生成 <style> まで
+    // 書き換え、payload 由来のクライアント再描画と不一致になるため無効化
+    // （コードハイライトを含む記事ページで hydration mismatch が発生する）
+    minify: { build: false },
   },
 
   sitemap: {
