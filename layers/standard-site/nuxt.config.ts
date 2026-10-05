@@ -4,13 +4,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       standardSite: {
-        // 例: did:plc:xxxx。空のときは AT-URI を出さない（link タグ・well-known は出さず、manifest の uri は null）
+        // did と publicationRkey のどちらかが空のときは AT-URI を出さない
+        // （link タグ・well-known は出さず、manifest の uri は null）
+        // 例: did:plc:xxxx
         did: '',
-        publicationRkey: 'self',
-        // Nuxt Content のコレクション名 → 記事 URL の prefix
-        collections: {
-          blog: { prefix: '/blog' },
-        } as Record<string, { prefix: string }>,
+        // publication レコードの rkey（TID）。作り方は README.md を参照
+        publicationRkey: '',
+        // マニフェストに含める Nuxt Content のコレクション名
+        collections: ['blog'] as string[],
       },
     },
   },
@@ -21,11 +22,12 @@ export default defineNuxtConfig({
       nitroConfig.prerender.routes ??= [];
       nitroConfig.prerender.routes.push('/standard-site/documents.json');
 
-      // did 未設定時の well-known は 404 を返すため、prerender に含めると generate が失敗する。
-      // prerender 時と同じく環境変数 NUXT_PUBLIC_STANDARD_SITE_DID による上書きも考慮して判定する
-      const envDid = process.env.NUXT_PUBLIC_STANDARD_SITE_DID;
-      const did = envDid ?? nitroConfig.runtimeConfig?.public?.standardSite?.did;
-      if (did) {
+      // 未設定時の well-known は 404 を返すため、prerender に含めると generate が失敗する。
+      // prerender 時と同じく環境変数による上書きも考慮して判定する
+      const config = nitroConfig.runtimeConfig?.public?.standardSite;
+      const did = process.env.NUXT_PUBLIC_STANDARD_SITE_DID ?? config?.did;
+      const publicationRkey = process.env.NUXT_PUBLIC_STANDARD_SITE_PUBLICATION_RKEY ?? config?.publicationRkey;
+      if (did && publicationRkey) {
         nitroConfig.prerender.routes.push('/.well-known/site.standard.publication');
       }
     },

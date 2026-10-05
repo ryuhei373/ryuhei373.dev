@@ -2,7 +2,7 @@
 // publication レコードの AT-URI を text/plain で返す
 export default defineEventHandler((event) => {
   const { did, publicationRkey } = useRuntimeConfig(event).public.standardSite;
-  if (!did) {
+  if (!did || !publicationRkey) {
     throw createError({ statusCode: 404, statusMessage: 'standard.site publication is not configured' });
   }
 

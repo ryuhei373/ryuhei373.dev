@@ -1,28 +1,13 @@
-// standard.site の discovery 用 link タグを全ページの head に注入する
-// - 全ページ: <link rel="site.standard.publication">（検証の代替ではなく discovery hint）
-// - 記事ページ: <link rel="site.standard.document">（document レコードとの双方向検証に使われる）
+// 全ページの head に <link rel="site.standard.publication"> を出す（検証の代替ではなく discovery hint）
+// 記事ページの <link rel="site.standard.document"> は useStandardSiteDocument で出す
 export default defineNuxtPlugin({
   name: 'standard-site-head',
   setup() {
-    const route = useRoute();
-    const { did, publicationRkey, collections } = useRuntimeConfig().public.standardSite;
+    const { did, publicationRkey } = useRuntimeConfig().public.standardSite;
+    if (!did || !publicationRkey) return;
 
     useHead({
-      link: computed(() => {
-        if (!did) return [];
-
-        const links = [
-          { rel: STANDARD_SITE_PUBLICATION_NSID, href: publicationUri(did, publicationRkey) },
-        ];
-        for (const { prefix } of Object.values(collections)) {
-          const rkey = documentRkeyFromPath(route.path, prefix);
-          if (rkey) {
-            links.push({ rel: STANDARD_SITE_DOCUMENT_NSID, href: documentUri(did, rkey) });
-            break;
-          }
-        }
-        return links;
-      }),
+      link: [{ rel: STANDARD_SITE_PUBLICATION_NSID, href: publicationUri(did, publicationRkey) }],
     });
   },
 });
