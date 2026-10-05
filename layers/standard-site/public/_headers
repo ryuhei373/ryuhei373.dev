@@ -1,0 +1,4 @@
+# Cloudflare Workers Static Assets のヘッダー設定
+# 拡張子のない well-known は Content-Type が付かないため明示する
+/.well-known/site.standard.publication
+  Content-Type: text/plain; charset=utf-8

@@ -17,9 +17,11 @@
     "textlint:fix": "textlint --fix \"content/**/*.md\"",
     "pick": "tools/r2-image-picker/target/release/r2-image-picker",
     "pick:build": "cargo build --release --manifest-path tools/r2-image-picker/Cargo.toml",
-    "blog:init": "tools/generate-content.sh"
+    "blog:init": "tools/generate-content.sh",
+    "standard-site:sync": "node --env-file-if-exists=.env layers/standard-site/scripts/sync.ts"
   },
   "devDependencies": {
+    "@atproto/api": "^0.23.0",
     "@iconify-json/ph": "^1.2.2",
     "@iconify-json/ri": "^1.2.10",
     "@nuxt/content": "^3.13.0",
