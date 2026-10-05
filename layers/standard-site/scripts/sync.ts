@@ -2,7 +2,7 @@
 // publication / document レコードを PDS に upsert（putRecord）する
 //
 // 使い方:
-//   nr standard-site:sync [--dry-run] [--only <rkey>] [--source <URL またはファイルパス>]
+//   nr standard-site:sync [--dry-run] [--only <rkey | スラッグ | publication>] [--source <URL またはファイルパス>]
 //
 // 環境変数:
 //   STANDARD_SITE_IDENTIFIER   handle または DID
@@ -90,6 +90,16 @@ const fetchExisting = async (agent: AtpAgent, repo: string, target: Target): Pro
   }
 };
 
+// --only の指定に一致するか。rkey（TID）のほか、記事のスラッグ（path の末尾）・path、publication を受け付ける
+const matchesOnly = (target: Target, only: string): boolean => {
+  if (target.rkey === only) return true;
+  if (target.collection === PUBLICATION_COLLECTION) return only === 'publication';
+
+  const path = typeof target.record.path === 'string' ? target.record.path : '';
+  const normalized = only.replace(/\/+$/, '');
+  return path === normalized || path.split('/').pop() === normalized;
+};
+
 const changedFields = (current: Record<string, unknown>, next: Record<string, unknown>): string[] => {
   const keys = new Set([...Object.keys(current), ...Object.keys(next)]);
   return [...keys].filter(key => !isDeepStrictEqual(current[key], next[key]));
@@ -107,14 +117,14 @@ const main = async (): Promise<void> => {
 
   const manifest = await loadManifest(values.source);
   if (!manifest.publication?.uri) {
-    throw new UsageError('マニフェストに publication の AT-URI がありません。nuxt.config の runtimeConfig.public.standardSite.did を設定して generate し直してください');
+    throw new UsageError('マニフェストに publication の AT-URI がありません。nuxt.config の runtimeConfig.public.standardSite.did と publicationRkey を設定して generate し直してください');
   }
   const manifestDid = didFromAtUri(manifest.publication.uri);
 
   const targets: Target[] = [
     { ...manifest.publication, collection: PUBLICATION_COLLECTION },
     ...manifest.documents.map(doc => ({ ...doc, collection: DOCUMENT_COLLECTION })),
-  ].filter(target => !values.only || target.rkey === values.only);
+  ].filter(target => !values.only || matchesOnly(target, values.only));
   if (targets.length === 0) {
     throw new UsageError(`--only ${values.only} に一致するレコードがマニフェストにありません`);
   }

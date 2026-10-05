@@ -63,6 +63,8 @@ export default defineNuxtConfig({
         // standard.site（layers/standard-site）のレコードを置く AT Protocol アカウントの DID（例: did:plc:xxxx）
         // 空のときは AT-URI を出さない。環境変数 NUXT_PUBLIC_STANDARD_SITE_DID でも上書きできる
         did: 'did:plc:7mspdpm2los5e37xitulwsxd',
+        // publication レコードの rkey（2026-10-05T15:00:00Z から作った TID）
+        publicationRkey: '3mx56lh5j2222',
       },
     },
   },
