@@ -12,6 +12,9 @@ export default defineNuxtConfig({
         publicationRkey: '',
         // マニフェストに含める Nuxt Content のコレクション名
         collections: ['blog'] as string[],
+        // publication レコードの icon に使う画像。サイトからの絶対パス（例: /icon.png）か絶対 URL。
+        // 空のときはサイトの favicon（/favicon.ico）を使う
+        publicationIcon: '',
       },
     },
   },

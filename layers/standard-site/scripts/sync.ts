@@ -1,5 +1,6 @@
 // standard.site のマニフェスト（/standard-site/documents.json）を読み、
-// publication / document レコードを PDS に upsert（putRecord）する
+// publication / document レコードを PDS に upsert（putRecord）する。
+// publication の icon は manifest の iconUrl から画像を取得し、必要なときだけ uploadBlob する
 //
 // 使い方:
 //   nr standard-site:sync [--dry-run] [--only <rkey | スラッグ | publication>] [--source <URL またはファイルパス>]
@@ -25,8 +26,13 @@ interface ManifestEntry {
   record: Record<string, unknown>;
 }
 
+interface PublicationEntry extends ManifestEntry {
+  // icon に使う画像の URL。blob 参照はビルド時に作れないため record の外にある
+  iconUrl?: string | null;
+}
+
 interface Manifest {
-  publication: ManifestEntry;
+  publication: PublicationEntry;
   documents: ManifestEntry[];
 }
 
@@ -40,6 +46,8 @@ const GRAPHEME_LIMITS: { field: string; max: number }[] = [
   { field: 'description', max: 3000 },
 ];
 const TAG_MAX_GRAPHEMES = 128;
+// publication の icon の上限（Lexicon の maxSize）
+const MAX_ICON_BYTES = 1_000_000;
 
 const segmenter = new Intl.Segmenter();
 const countGraphemes = (text: string): number => [...segmenter.segment(text)].length;
@@ -59,6 +67,108 @@ const loadManifest = async (source: string): Promise<Manifest> => {
 };
 
 const didFromAtUri = (uri: string): string | null => uri.match(/^at:\/\/([^/]+)\//)?.[1] ?? null;
+
+export interface IconImage {
+  data: Uint8Array;
+  mimeType: string;
+}
+
+const startsWith = (data: Uint8Array, bytes: number[], offset = 0): boolean =>
+  data.length >= offset + bytes.length && bytes.every((byte, i) => data[offset + i] === byte);
+
+const PNG_SIGNATURE = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+const ICO_SIGNATURE = [0x00, 0x00, 0x01, 0x00];
+const ascii = (text: string): number[] => [...text].map(char => char.charCodeAt(0));
+
+// Content-Type は配信側の設定で揺れる（image/x-icon、image/vnd.microsoft.icon など）ため、先頭バイトで判定する
+const detectImageType = (data: Uint8Array): 'png' | 'jpeg' | 'webp' | 'ico' | null => {
+  if (startsWith(data, PNG_SIGNATURE)) return 'png';
+  if (startsWith(data, [0xFF, 0xD8, 0xFF])) return 'jpeg';
+  if (startsWith(data, ascii('RIFF')) && startsWith(data, ascii('WEBP'), 8)) return 'webp';
+  if (startsWith(data, ICO_SIGNATURE)) return 'ico';
+  return null;
+};
+
+// ICO に含まれる PNG エントリのうち、最大サイズのものを取り出す。PNG エントリが無ければ null。
+// ICO のディレクトリエントリの幅・高さは 1 バイト（0 は 256）で 256 を超える画像を表せないため、PNG の IHDR から読む
+export const extractPngFromIco = (data: Uint8Array): { png: Uint8Array; width: number; height: number } | null => {
+  if (!startsWith(data, ICO_SIGNATURE) || data.length < 6) return null;
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  const count = view.getUint16(4, true);
+
+  let best: { png: Uint8Array; width: number; height: number } | null = null;
+  for (let i = 0; i < count; i++) {
+    const entry = 6 + i * 16;
+    if (entry + 16 > data.length) break;
+    const size = view.getUint32(entry + 8, true);
+    const offset = view.getUint32(entry + 12, true);
+    if (offset + size > data.length) continue;
+
+    const image = data.subarray(offset, offset + size);
+    // BMP エントリ（PNG シグネチャで始まらないもの）は対象外
+    if (!startsWith(image, PNG_SIGNATURE) || image.length < 24) continue;
+    const ihdr = new DataView(image.buffer, image.byteOffset, image.byteLength);
+    const width = ihdr.getUint32(16);
+    const height = ihdr.getUint32(20);
+    if (!best || width * height > best.width * best.height) {
+      best = { png: image, width, height };
+    }
+  }
+  return best;
+};
+
+// publication の icon に使う画像を取得する。取得・変換できない場合は警告して null を返す（icon なしで続行する）
+const loadIcon = async (url: string): Promise<IconImage | null> => {
+  const warn = (message: string): null => {
+    console.warn(`[warn] icon: ${message}。icon を付けずに続行します`);
+    return null;
+  };
+
+  let data: Uint8Array;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return warn(`${url} を取得できませんでした (${res.status})`);
+    data = new Uint8Array(await res.arrayBuffer());
+  }
+  catch (error) {
+    return warn(`${url} を取得できませんでした (${error instanceof Error ? error.message : String(error)})`);
+  }
+
+  let icon: IconImage;
+  switch (detectImageType(data)) {
+    case 'png':
+      icon = { data, mimeType: 'image/png' };
+      break;
+    case 'jpeg':
+      icon = { data, mimeType: 'image/jpeg' };
+      break;
+    case 'webp':
+      icon = { data, mimeType: 'image/webp' };
+      break;
+    case 'ico': {
+      const extracted = extractPngFromIco(data);
+      if (!extracted) return warn(`${url} に PNG のエントリがありません（BMP のみの ICO には対応していません）`);
+      console.log(`icon: ${url} から ${extracted.width}x${extracted.height} の PNG を取り出しました`);
+      icon = { data: extracted.png, mimeType: 'image/png' };
+      break;
+    }
+    default:
+      return warn(`${url} は対応していない形式です（PNG / JPEG / WebP / PNG を含む ICO に対応）`);
+  }
+
+  if (icon.data.length >= MAX_ICON_BYTES) {
+    return warn(`画像サイズ ${icon.data.length} bytes が上限（${MAX_ICON_BYTES} bytes 未満）を超えています`);
+  }
+  return icon;
+};
+
+// 既存レコードの icon（blob 参照）が今回の画像と同じとみなせるか。
+// blob の CID を計算して突き合わせる代わりに、mimeType と size の一致で判定する
+const isSameIcon = (current: unknown, icon: IconImage): boolean => {
+  if (typeof current !== 'object' || current === null) return false;
+  const { mimeType, size } = current as { mimeType?: unknown; size?: unknown };
+  return mimeType === icon.mimeType && size === icon.data.length;
+};
 
 const warnLimits = (target: Target): void => {
   for (const { field, max } of GRAPHEME_LIMITS) {
@@ -130,6 +240,12 @@ const main = async (): Promise<void> => {
   }
   targets.forEach(warnLimits);
 
+  // 画像の取得・変換は認証より前に行い、認証情報なしでも確認できるようにする
+  const iconUrl = manifest.publication.iconUrl;
+  const icon = iconUrl && targets.some(target => target.collection === PUBLICATION_COLLECTION)
+    ? await loadIcon(iconUrl)
+    : null;
+
   const identifier = process.env.STANDARD_SITE_IDENTIFIER;
   const password = process.env.STANDARD_SITE_APP_PASSWORD;
   if (!identifier || !password) {
@@ -147,8 +263,29 @@ const main = async (): Promise<void> => {
   for (const target of targets) {
     const label = `${target.collection}/${target.rkey}`;
     const current = await fetchExisting(agent, sessionDid, target);
+    const record = { ...target.record };
 
-    if (current && isDeepStrictEqual(current, target.record)) {
+    if (target.collection === PUBLICATION_COLLECTION && iconUrl && !icon && current?.icon) {
+      // 画像を取得できなかったときは既存の icon を外さずに残す
+      record.icon = current.icon;
+      console.log('icon: keep');
+    }
+    else if (target.collection === PUBLICATION_COLLECTION && icon) {
+      if (current && isSameIcon(current.icon, icon)) {
+        // 同じ画像とみなし、既存の blob 参照を使い回す（画像が変わらなければ record 全体の比較で skip になる）
+        record.icon = current.icon;
+        console.log('icon: reuse');
+      }
+      else {
+        console.log(`icon: upload (${icon.data.length} bytes, ${icon.mimeType})`);
+        record.icon = dryRun
+          // dry-run では uploadBlob しないため、差分表示用の仮の blob 参照を置く
+          ? { $type: 'blob', ref: { $link: '(dry-run)' }, mimeType: icon.mimeType, size: icon.data.length }
+          : (await agent.com.atproto.repo.uploadBlob(icon.data, { encoding: icon.mimeType })).data.blob;
+      }
+    }
+
+    if (current && isDeepStrictEqual(current, record)) {
       summary.skip++;
       console.log(`skip   ${label}`);
       continue;
@@ -156,7 +293,7 @@ const main = async (): Promise<void> => {
 
     const action = current ? 'update' : 'create';
     summary[action]++;
-    const detail = current ? ` (${changedFields(current, target.record).join(', ')})` : '';
+    const detail = current ? ` (${changedFields(current, record).join(', ')})` : '';
     console.log(`${action.padEnd(6)} ${label}${detail}`);
 
     if (!dryRun) {
@@ -164,7 +301,7 @@ const main = async (): Promise<void> => {
         repo: sessionDid,
         collection: target.collection,
         rkey: target.rkey,
-        record: target.record,
+        record,
       });
     }
   }
@@ -172,12 +309,15 @@ const main = async (): Promise<void> => {
   console.log(`\n${dryRun ? '[dry-run] ' : ''}create: ${summary.create}, update: ${summary.update}, skip: ${summary.skip}`);
 };
 
-main().catch((error: unknown) => {
-  if (error instanceof UsageError) {
-    console.error(`error: ${error.message}`);
-  }
-  else {
-    console.error(error);
-  }
-  process.exitCode = 1;
-});
+// 解析関数を単体で呼べるよう、import されたときは実行しない
+if (import.meta.main) {
+  main().catch((error: unknown) => {
+    if (error instanceof UsageError) {
+      console.error(`error: ${error.message}`);
+    }
+    else {
+      console.error(error);
+    }
+    process.exitCode = 1;
+  });
+}
