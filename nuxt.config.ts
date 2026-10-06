@@ -84,6 +84,13 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    build: {
+      // Vite 8 で CSS の minify が lightningcss になり、既定ターゲットでは
+      // light-dark() が互換変換される。変換後の補助変数は Nuxt UI が
+      // color-scheme を宣言する body にしか付かず、:root で使う
+      // light-dark() が壊れるため、対応ブラウザを対象にして変換を抑止する
+      cssTarget: ['chrome123', 'edge123', 'firefox120', 'safari17.5'],
+    },
     optimizeDeps: {
       include: [
         '@vue/devtools-core',
