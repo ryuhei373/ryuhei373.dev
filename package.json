@@ -30,7 +30,7 @@
     "@nuxt/image": "^2.1.0",
     "@nuxt/ui": "^4.11.3",
     "@nuxtjs/seo": "^5.3.16",
-    "@takumi-rs/core": "^1.0.16",
+    "@takumi-rs/core": "^2.14.0",
     "better-sqlite3": "^12.9.0",
     "eslint": "^10.12.0",
     "feed": "^6.0.0",

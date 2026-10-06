@@ -17,6 +17,7 @@
     >
     <div
       style="
+        font-family: 'Geist', sans-serif;
         font-size: 64px;
         font-weight: 700;
         color: #100F0F;
