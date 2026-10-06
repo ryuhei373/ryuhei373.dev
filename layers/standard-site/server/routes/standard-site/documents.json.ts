@@ -6,6 +6,12 @@ interface ManifestEntry<T> {
   record: T;
 }
 
+// publication は icon の blob 参照をビルド時に作れないため、画像の URL を record の外に置く。
+// sync.ts が画像を取得して uploadBlob し、record.icon に入れる
+interface PublicationEntry extends ManifestEntry<PublicationRecord> {
+  iconUrl: string | null;
+}
+
 interface PublicationRecord {
   $type: typeof STANDARD_SITE_PUBLICATION_NSID;
   url: string;
@@ -25,22 +31,32 @@ interface DocumentRecord {
   textContent: string;
 }
 
+// 未設定ならサイトの favicon。サイトからの絶対パスはサイト URL と結合し、絶対 URL はそのまま使う
+const resolveIconUrl = (siteUrl: string, icon: string): string | null => {
+  if (/^https?:\/\//.test(icon)) return icon;
+  if (!siteUrl || siteUrl === '/') return null;
+  const path = icon || '/favicon.ico';
+  return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;
+};
+
 export default defineEventHandler(async (event) => {
-  const { did, publicationRkey, collections } = useRuntimeConfig(event).public.standardSite;
+  const { did, publicationRkey, collections, publicationIcon } = useRuntimeConfig(event).public.standardSite;
   const configured = Boolean(did && publicationRkey);
   const site = getSiteConfig(event);
+  const siteUrl = withoutTrailingSlashes(site.url);
   const publicationAtUri = configured ? publicationUri(did, publicationRkey) : null;
 
-  const publication: ManifestEntry<PublicationRecord> = {
+  const publication: PublicationEntry = {
     rkey: publicationRkey,
     uri: publicationAtUri,
     record: {
       $type: STANDARD_SITE_PUBLICATION_NSID,
-      url: withoutTrailingSlashes(site.url),
+      url: siteUrl,
       name: site.name,
       ...(site.description ? { description: site.description } : {}),
       preferences: { showInDiscover: true },
     },
+    iconUrl: resolveIconUrl(siteUrl, publicationIcon),
   };
 
   const documents: ManifestEntry<DocumentRecord>[] = [];

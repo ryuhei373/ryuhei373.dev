@@ -31,7 +31,7 @@ scripts/sync.ts（@atproto/api、App Password）… マニフェストを読ん�
 | `server/routes/standard-site/documents.json.ts` | マニフェスト |
 | `server/utils/standardSiteText.ts` | 記事本文（minimark）の平文化 |
 | `public/_headers` | Workers の静的アセット配信で well-known に `Content-Type: text/plain` を付ける |
-| `scripts/sync.ts` | マニフェストを読んで PDS に putRecord |
+| `scripts/sync.ts` | マニフェストを読んで PDS に putRecord（publication の icon は uploadBlob） |
 
 ## 設定
 
@@ -42,8 +42,9 @@ scripts/sync.ts（@atproto/api、App Password）… マニフェストを読ん�
 | `did` | `''` | レコードを置くアカウントの DID（例: `did:plc:xxxx`） |
 | `publicationRkey` | `''` | publication レコードの rkey（TID）。作り方は「rkey の決め方」 |
 | `collections` | `['blog']` | マニフェストに含める Nuxt Content のコレクション名 |
+| `publicationIcon` | `''` | publication レコードの icon に使う画像。サイトからの絶対パス（例: `/icon.png`）か絶対 URL。空のときはサイトの favicon（`/favicon.ico`）を使う |
 
-`did` と `publicationRkey` のどちらかが空のときは link タグ・well-known を出さず、マニフェストの `uri` は `null` になる。それぞれ環境変数 `NUXT_PUBLIC_STANDARD_SITE_DID`、`NUXT_PUBLIC_STANDARD_SITE_PUBLICATION_RKEY` でも上書きできる。
+`did` と `publicationRkey` のどちらかが空のときは link タグ・well-known を出さず、マニフェストの `uri` は `null` になる。それぞれ環境変数 `NUXT_PUBLIC_STANDARD_SITE_DID`、`NUXT_PUBLIC_STANDARD_SITE_PUBLICATION_RKEY`、`NUXT_PUBLIC_STANDARD_SITE_PUBLICATION_ICON` でも上書きできる。
 
 サイト名・URL・説明はルートの `site` 設定（`@nuxtjs/seo`）から取る。
 
@@ -77,6 +78,8 @@ node -e "import('./layers/standard-site/shared/utils/standardSite.ts').then(m =>
 7. `nr standard-site:sync` で書き込む
 8. https://site-validator.fly.dev で検証する
 
+icon は手順 7 で一緒に付く。`publicationIcon` を後から変えた場合や、既存の publication レコードに icon を付けたい場合は、デプロイ後に `nr standard-site:sync --only publication` を再実行する。
+
 ## 送信スクリプト
 
 ```sh
@@ -91,6 +94,17 @@ nr standard-site:sync [--dry-run] [--only <rkey | スラッグ | publication>] [
 
 既存レコードを `getRecord` で取得し、内容が同じなら skip、違えば `putRecord` で上書きする。ログインしたアカウントの DID とマニフェストの DID が一致しない場合は中断する。title / description / tags が Lexicon の文字数制約を超える場合は警告する（切り詰めはしない）。
 
+### publication の icon
+
+publication レコードの `icon` は blob で、PDS へのアップロード（`uploadBlob`）で得た参照を入れる必要がある。ビルドにシークレットを持ち込まないよう、マニフェストには画像の URL（`publication.iconUrl`、record の外）だけを載せ、画像の取得とアップロードは送信スクリプトが行う。
+
+- 画像は `iconUrl` から取得する。デプロイ済みのサイトから取るため、画像を変えたらデプロイしてから送信する
+- PNG / JPEG / WebP はそのまま使う。ICO は含まれる PNG エントリのうち最大のものを取り出して使う。BMP のエントリしか無い ICO には対応していない
+- 1MB（1,000,000 bytes）以上の画像は Lexicon の上限を超えるため使わない
+- 取得できない・対応していない形式・サイズ超過のときは警告し、icon なしで続行する。既存レコードに icon があれば、その icon は外さずに残す（`icon: keep`）
+- 既存レコードに icon があり、`mimeType` と `size`（bytes）が今回の画像と一致すれば同じ画像とみなし、既存の blob 参照を使い回す。一致しなければ `uploadBlob` する。画像の内容から CID を計算して突き合わせることはしないので、同じ形式・同じバイト数のまま中身だけ変わった画像は検出できない
+- `--dry-run` では `uploadBlob` せず、`icon: upload (<size> bytes, <mimeType>)` または `icon: reuse` を表示する
+
 ### 環境変数
 
 `.env`（gitignore 済み）に書くと `nr standard-site:sync` が読み込む。
@@ -104,4 +118,4 @@ nr standard-site:sync [--dry-run] [--only <rkey | スラッグ | publication>] [
 ## スコープ外
 
 - サイトから消えた記事のレコード削除。必要になったら PDS 側で手動で `deleteRecord` する
-- 記事の更新日時（`updatedAt`）、カバー画像、publication のアイコン・テーマ
+- 記事の更新日時（`updatedAt`）、カバー画像、publication のテーマ
