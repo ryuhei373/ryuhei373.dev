@@ -11,7 +11,7 @@
       <UAvatar
         :as="{ img: 'img' }"
         src="https://github.com/ryuhei373.png"
-        alt="ryuhei373 のアバター"
+        alt="373.3 のアバター"
       />
       <span>ryuhei373.dev</span>
     </template>
