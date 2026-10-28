@@ -12,12 +12,12 @@ export default defineEventHandler(async (event) => {
     link: basePath,
     language: 'ja',
     favicon: basePath + '/favicon.ico',
-    copyright: 'All rights reserved 2025, ryuhei373',
+    copyright: '© 373.3',
     feedLinks: {
       rss: basePath + '/rss.xml',
     },
     author: {
-      name: 'ryuhei373',
+      name: '373.3',
       email: 'mail@ryuhei.dev',
       link: basePath,
     },
