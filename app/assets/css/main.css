@@ -11,7 +11,7 @@
   hanging-punctuation: first allow-end;
 
   /* Nuxt UI variables - must be in :root to override @nuxt/ui defaults */
-  --ui-container: var(--container-6xl);
+  --ui-container: var(--container-3xl);
 
   /*
    * Flexoki 公式の light/dark セマンティックマッピングに合わせて

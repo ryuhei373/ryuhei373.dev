@@ -24,9 +24,7 @@ useHead({
     <AppHeader />
     <AppMobileNav />
     <UContainer as="main">
-      <div class="max-w-2xl mx-auto">
-        <NuxtPage />
-      </div>
+      <NuxtPage />
     </UContainer>
     <AppFooter />
   </UApp>
