@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { navItems, navUi } from '~/data/nav';
+</script>
+
 <template>
   <UHeader
     to="/"
@@ -16,6 +20,12 @@
       <span>ryuhei373.dev</span>
     </template>
     <template #right>
+      <UNavigationMenu
+        :items="navItems"
+        variant="link"
+        :ui="navUi"
+        class="hidden sm:flex"
+      />
       <DarkModeToggleSwitch />
     </template>
   </UHeader>

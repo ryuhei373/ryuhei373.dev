@@ -1,0 +1,2 @@
+/slides/ /slides 301
+/slides/* https://slides.ryuhei373.dev/:splat 301
