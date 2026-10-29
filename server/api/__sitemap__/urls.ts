@@ -10,16 +10,12 @@ export default defineSitemapEventHandler(async (event) => {
     lastmod: article.createdAt,
   }));
 
-  const years = new Set<number>();
   const tags = new Set<string>();
   for (const article of articles) {
-    if (article.createdAt) years.add(new Date(article.createdAt).getFullYear());
     for (const tag of article.tags ?? []) tags.add(tag);
   }
 
-  const archiveUrls: SitemapUrlInput[] = [...years].map(year => ({
-    loc: `/archive/${year}`,
-  }));
+  const archiveUrls: SitemapUrlInput[] = [{ loc: '/archive' }];
   const tagUrls: SitemapUrlInput[] = [...tags].map(tag => ({
     loc: `/tags/${tag}`,
   }));
